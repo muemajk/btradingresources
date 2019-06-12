@@ -10,5 +10,5 @@ DEBUG = False
 #DEBUG = os.environ.get('DJANGO_DEBUG', '') != 'False'
 
 
-ALLOWED_HOSTS = ['https://btradingresources.com']
+ALLOWED_HOSTS = ['75.98.169.74']
 
