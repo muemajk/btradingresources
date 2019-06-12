@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Our Companies!</title>
+  </head>
+  <body style="font-family: sans-serif;  padding: 0;margin: 0;">
+    {%load static %}
+ <nav class="navbar navbar-inverse" style=" position: fixed; top: 0;  left: 0;  z-index: 9999;  width: 100%; height: 50px; background-color: #FFFFF0;  height: auto; box-shadow: 0px 0px 3px #F8F8FF; ">
+  <div class="container-fluid" style="">
+    <div class="navbar-header" style="">
+      <a class="navbar-brand" href="{% url 'ecommerce:index'%}"><strong style="font-family: 'Pacifico', cursive;">BT</strong>RESOURCES</a>
+    </div>
+    <ul class="nav navbar-nav" style="display: inline-block; width: 57%; padding-left: 15%; float: right; ">
+      <li class="active" style="display: inline-block;  margin-left: 2%;"><a href="{% url 'ecommerce:index'%}" style="text-decoration-color: grey; color: black; font-weight: bold;">HOME</a></li>
+      <li class="dropdown" style="display: inline-block; margin-left: 2%; font-weight: bold;">
+        <a href="{% url 'ecommerce:company_view'%}"style="text-decoration-color: black; color: black; font-weight: bold;">COMPANIES</a>
+        
+      </li>
+      
+      <li style="display: inline-block; margin-left: 2%;"><a href="{% url 'ecommerce:membership_view'%}" style="text-decoration-color: black; font-weight: bold; color: black;">MEMBERSHIP</a></li>
+    </ul>
+<ul style="display: inline-block; width: auto; ">
+      {%if user_name == None%}
+       <li style="display: inline-block; margin-left: 3%;"><a href="{% url 'login_page'%}"style="text-decoration-color: black; font-weight: bold; color: black;">LOGIN</a></li>
+      
+      <li style=" display: inline-block; margin-left: 3%;">|</li>
+      <li style="display: inline-block; margin-left: 1%;"><a href="{% url 'register_page'%}" style="text-decoration-color: black; font-weight: bold; color: black;">SIGN UP</a></li>
+      {%elif user_name != None %}
+          
+            <li style=" display: inline-block; margin-top: 2px; margin-left: 2%;"><p style="font-weight: bold; font-size: 10px; font-style: italic;">{{user_name}}<br>{{times}}</p></li>
+            <li style=" display: inline-block;"><table>
+                <tr><td><div class="row" style="float: left; width: 100%;"><a class="btn btn-primary" href="{% url 'profile_view'%}" style="font-size: 10px; height: 25px;">PROFILE</a></div></td><td>              <div class="row" style="float: right; width: 100%;"><a class="btn btn-primary" href="{% url 'logout_view'%}" style="font-size: 10px; height: 25px;">lOGOUT</a></div></td></tr>
+              </table></li>
+      {%endif%}      
+    </ul>
+  </div>
+</nav>
+    <div class = "container" style=" width: 100%;margin-top: 110px;">
+      <div class="row">
+        <div class="row">
+
+          <h2 style="text-decoration: underline; text-align: center; margin-bottom: 30px;">OUR COMPANY AND PARTNERS</h2>
+        <p style=" font-style: italic;">Bt resources is acompany dedicated to providing ecommerce services to three of our partner companies. All three companies deal with  their own range of products and services. This can be seen below</p>
+        
+        </div>
+
+        <div class="row"  style="display: inline-block; margin: 1%; box-shadow: 0px 0px 3px #F8F8FF; border: 1px solid #F8F8FF; width: 30%; padding: 10px; height: 30%; ">
+          <h4>FLINTWOOD</h4>
+          <img src="{% static 'ecommerce/flint.png' %}" width="50%" height="55%">
+
+        <p  style=" margin-top: 8%; font-style: italic;">Flintwood is a kenyan company that caters for it clients agricultural needs. With dedication to agricultural products the company maintains a close connection to farmers to ensure quality products and  timely shipping</p>
+        <a style="float: right; font-size: 15px; text-decoration: none; font-style: italic;" href="{% url 'ecommerce:flint_view'%}">More on Flintwood</a>
+        <hr>
+        <a style="margin-top: 30%; font-weight: bold; font-style: italic;" href="{% url 'Flintwood:store_page'%}">Go to store</a>
+        
+        </div>
+        <div class="row"  style="display: inline-block; margin: 1%; box-shadow: 0px 0px 3px #F8F8FF; border: 1px solid #F8F8FF; width: 30%; padding: 10px; height: 30%; ">
+          <h4>BIOTEC</h4>
+          <img src="{% static 'ecommerce/biotech.png' %}"  width="45%" height="50%">
+        <p style=" font-style: italic;">Biotec medical suplies  Office is in the Lafrenz Industrial Park, Windhoek. We source strategic Contract Manufacturers and Quality Suppliers from Africa, Europe, Asia, America and target the Local markets  of several African countries in Sub-Saharan Africa.</p>
+        <a style="float: right; font-size: 15px; text-decoration: none; font-style: italic;" href="{% url 'ecommerce:biotec_view'%}">More on Biotec</a>
+        <hr>
+        <a style="margin-top: 30%; font-weight: bold; font-style: italic;" href="{% url 'Biotech:store_page'%}">Go to store</a>
+        
+        </div>
+        <div class="row"  style="display: inline-block; margin: 1%; box-shadow: 0px 0px 3px #F8F8FF; border: 1px solid #F8F8FF; width: 30%; padding: 10px; height: 30%; ">
+
+          <h4>TK TITAN</h4>
+          <img src="{% static 'ecommerce/tktitan.png' %}" width="40%" height="35%">
+        <p style=" font-style: italic;">Tk Titan is a company dedicated to providing minerals mined from africa. Tk titan's business plan is to extend operations and partnerships in Sub-Saharan Africa specifically Angola, Botswana, DRC, Kenya and Uganda.</p>
+        <a style="float: right; font-size: 15px; text-decoration: none; font-style: italic;" href="{% url 'ecommerce:tk_view'%}">More on Tk Titan</a>
+        <hr>
+        <a style="margin-top: 30%; font-weight: bold; font-style: italic;" href="{% url 'TKTitan:store_page'%}">Go to store</a>
+        </div>
+      </div>
+      <hr>
+    </div>
+  <!-- Footer -->
+<footer class="page-footer font-small blue pt-4" style="background-color: black; color: white; box-shadow: 0px 0px 3px grey;   ">
+
+  <!-- Footer Links -->
+  <div class="container-fluid text-center text-md-left">
+
+    <!-- Grid row -->
+    <div class="row">
+
+      <!-- Grid column -->
+      <div class="col-md-6 mt-md-0 mt-3">
+
+        <!-- Content -->
+        <h5 class="text-uppercase">BTresources</h5>
+        <p>Trusted Ecommerce website.</p>
+
+      </div>
+      <!-- Grid column -->
+
+      <hr class="clearfix w-100 d-md-none pb-3">
+
+      <!-- Grid column -->
+      <div class="col-md-3 mb-md-0 mb-3">
+
+        <!-- Links -->
+        <h5 class="text-uppercase">Links</h5>
+
+        <ul class="list-unstyled">
+          <li>
+             <a href="{% url 'index'%}">Home</a>
+          </li>
+
+          <li>
+             <a href="{% url 'Flintwood:store_page'%}">Flintwood</a>
+          </li>
+          <li>
+             <a href="{% url 'TKTitan:store_page'%}">TkTitan</a>
+          </li>
+          <li>
+             <a href="{% url 'Biotech:store_page'%}">Biotech</a>
+          </li>
+         <li>
+             <a href="{% url 'admin_page'%}">Adminstrator</a>
+          </li>
+        </ul>
+
+      </div>
+      <!-- Grid column -->
+
+      <!-- Grid column -->
+
+      <!-- Grid column -->
+
+    </div>
+    <!-- Grid row -->
+
+  </div>
+  <!-- Footer Links -->
+
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-3">© 2018 Copyright:
+    <a href="https://mdbootstrap.com/education/bootstrap/"> MDBootstrap.com</a>
+  </div>
+  <!-- Copyright -->
+
+</footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>

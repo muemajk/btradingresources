@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en" style=" padding: 0;margin: 0;">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <title>Welcome!</title>
+  </head>
+  <body style="font-family: sans-serif;  padding: 0;margin: 0;">
+    {%load static %}
+ <nav class="navbar navbar-inverse" style=" position: fixed; top: 0;  left: 0;  z-index: 9999;  width: 100%; height: 50px; background-color: #FFFFF0;  height: auto;  ">
+  <div class="container-fluid" style="">
+    <div class="navbar-header" style="">
+      <a class="navbar-brand" href="{% url 'ecommerce:index'%}"><strong>BT</strong>RESOURCES</a>
+    </div>
+    <ul class="nav navbar-nav" style="display: inline-block; width: 57%; padding-left: 15%; float: right; ">
+      <li class="active" style="display: inline-block;  margin-left: 2%;"><a href="{% url 'ecommerce:index'%}" style="text-decoration-color: grey; color: black; font-weight: bold;">HOME</a></li>
+      <li class="dropdown" style="display: inline-block; margin-left: 2%; font-weight: bold;">
+        <a href="{% url 'ecommerce:company_view'%}"style="text-decoration-color: black; color: black; font-weight: bold;">COMPANIES</a>
+        
+      </li>
+      
+      <li style="display: inline-block; margin-left: 2%;"><a href="{% url 'ecommerce:membership_view'%}" style="text-decoration-color: black; font-weight: bold; color: black;">MEMBERSHIP</a></li>
+    </ul>
+    <ul style="display: inline-block; width: auto; ">
+      {%if user_name == None%}
+       <li style="display: inline-block; margin-left: 3%;"><a href="{% url 'login_page'%}"style="text-decoration-color: black; font-weight: bold; color: black;">LOGIN</a></li>
+      
+      <li style=" display: inline-block; margin-left: 3%;">|</li>
+      <li style="display: inline-block; margin-left: 1%;"><a href="{% url 'register_page'%}" style="text-decoration-color: black; font-weight: bold; color: black;">SIGN UP</a></li>
+      {%elif user_name != None %}
+          
+            <li style=" display: inline-block; margin-top: 2px; margin-left: 2%;"><p style="font-weight: bold; font-size: 10px; font-style: italic;">{{user_name}}<br>{{times}}</p></li>
+            <li style=" display: inline-block;"><table>
+                <tr><td><div class="row" style="float: left; width: 100%;"><a class="btn btn-primary" href="{% url 'profile_view'%}" style="font-size: 10px; height: 25px;">PROFILE</a></div></td><td>              <div class="row" style="float: right; width: 100%;"><a class="btn btn-primary" href="{% url 'logout_view'%}" style="font-size: 10px; height: 25px;">lOGOUT</a></div></td></tr>
+              </table></li>
+      {%endif%}      
+    </ul>
+  </div>
+</nav>
+    <div class = "container" style=" width: 100%;margin-top: 130px;">
+      <div class="col" >
+        <div class="row" style=" width: 100%; margin: 0px;">
+        
+          <div class = "col" style="float: left;
+           display: inline-block; margin-top: 38%;">
+          <a href="{% url 'ecommerce:index'%}"><h3><strong style="font-family: 'Pacifico', cursive; font-size: 35px;">BT</strong> RESOURCES</h3></a>
+          
+          <p style="font-size: 20px; font-style: italic;">Striving to provide quality products to our customers</p>
+
+          <a href="{% url 'register_page'%}" class="btn btn-primary">GET STARTED</a>
+
+
+        </div>
+        <div class="col" style=" float: right; width: 30%; display: inline-block;">
+          {% load static %}
+          <img src="{% static 'ecommerce/companylogo.png' %}" width="850px" height="500px" style="float: right;"></div>
+        
+</div>
+
+      </div>
+
+      <div class="col" style="margin-top: 50px;">
+        <h1 style="text-align: center;">Getting to know us</h1>
+          <p style="font-style: italic;">Btresources is a company dedicated to providing quality ecommerce services to clients from both around and outside Africa. Our prime goal is to be a leading trusted ecommerce company in Africa. Some of the services we love to offer</p>
+          <nav>
+            <ul style="font-style: italic;">
+              <li>Importation of goods into Namibia</li>
+              <li>Shipment of agricultural goods from around Africa. 
+              </li>
+              <li>Delivery of quality medical products and services</li>
+            </ul>
+          </nav>
+          <p  style="font-style: italic;">Btresources is a growing company at the moment serving as the ecommerce of three different companies. The companies are Flintwood Resources, Tk Titan Trading cc and Biotec Medical Suppies.</p>
+        </div>
+        <div class="col">
+          <h6 style="text-align: center; color: #FFA07A;">Begin your journey</h6>
+          <h4  style="text-align: center;">What services or products are you looking for.</h4>
+          <div class="row">
+            <div class="col" style="border: 1px solid   #F8F8FF; box-shadow: 1px 1px 1px 1px   #F8F8FF; margin: 10px; padding: 10px;">
+          {% load static %}
+          <img src="{% static 'ecommerce/meds.jpg' %}" width="200" height="150" alt="Medicine image">
+          <h6 style="font-weight: bold;">Medicinal Products</h6>
+          <p style="font-style: italic;">We provide medical products and services</p>
+          <ul style="font-style: italic;">
+            <li>Panadol</li>
+            <li>Flu gone</li>
+            <li>Cough syprus</li>
+          </ul> 
+          <a href="{% url 'Biotech:store_page'%}" class="btn btn-primary">Check our catalog</a>
+            </div>
+            <div class="col"  style="border: 1px solid  #F8F8FF; box-shadow: 1px 1px 1px 1px  #F8F8FF; margin: 10px;padding: 10px;">
+          
+          <img src="{% static 'ecommerce/medeq.jpg' %}"width="200" height="150" alt="medical image">  
+          <h6 style="font-weight: bold;"> Medical Equipments</h6> 
+          <p style="font-style: italic;">We provide medical equipment to clinics and hosipitals </p>
+            <ul style="font-style: italic;">
+            <li>X-rays</li>
+            <li>Ultra sounds</li>
+            <li>Cructhes</li>
+          </ul> 
+          <a href="{% url 'Biotech:store_page'%}" class="btn btn-primary">Check our catalog</a>
+            </div>
+            <div class="col"  style="border: 1px solid  #F8F8FF; box-shadow: 1px 1px 1px 1px  #F8F8FF; margin: 10px;padding: 10px;">
+          {% load static %}
+          <img src="{% static 'ecommerce/mine.jpg' %}" width="200" height="150"  alt=" image">
+          <h6 style="font-weight: bold;"> Minerals</h6> 
+          <p style="font-style: italic;">We provide minerals extracted from congo and other areas</p> 
+          <ul style="font-style: italic;">
+            <li>Copper</li>
+            <li>Iron</li>
+            <li>Cobalt</li>
+          </ul>
+           <a href="{% url 'TKTitan:store_page'%}" class="btn btn-primary">Check our catalog</a>             
+            </div>
+            <div class="col"  style="border: 1px solid  #F8F8FF; box-shadow: 1px 1px 1px 1px  #F8F8FF; margin: 10px;padding: 10px;">
+          {% load static %}
+          <img src="{% static 'ecommerce/agri2.jpg' %}" width="200" height="150"> 
+
+          <h6 style="font-weight: bold;">Agriculctural products</h6> 
+          <p style="font-style: italic;">We provide agricultural products from around Africa</p> 
+          <ul style="font-style: italic;">
+            <li>Avocados</li>
+            <li>Green Grams</li>
+            <li>Mangos</li>
+          </ul>
+          <a href="{% url 'Flintwood:store_page'%}" class="btn btn-primary">Check our catalog</a>             
+            </div>
+          </div>
+          <div class="col" style="margin-top: 30px; background-color: #FFFFF0; margin: none; width: 100%; height: 450px; padding: 100px;">
+            <h1 style="text-align: center;">Our Philosophy.</h1>
+            <p style="text-align: center;font-style: italic;">There's no room for hate and violence in this world. We must learn to be more kind, compassionate, empathetic, and sympathetic to humanity.</p>
+            <h3 style="text-align: center;">Our vision.</h3>
+            <p style="text-align: center; font-style: italic;">To be the most sustainable efficient and effective Products distributor and ecommerce in our areas of operation(Sub saharan Africa)</p>
+            <h3 style="text-align: center;">Our goal.</h3>
+            <p style="text-align: center; font-style: italic;">To provide integrated solutions for our clients. By building stronger relationships with all our stakeholders.</p>            
+          </div>
+          <div class="col" style="margin-top: 30px; padding: 20px;">
+            <h2 style="text-align: center;">How to get our services</h2>
+            <div class="row" >
+            <img src="{% static 'ecommerce/map.png' %}" width="70%" height="92%" style="float: left;">
+            <div class="col" style="float: right;">
+              <h4>Visit Us</h4>
+              <h6>Pay us a visit from Monday to Friday</h6>
+              <p style="font-style: italic;">8:00am - 5:00pm</p>
+              <h6>We are located on </h6>
+              <p style="font-style: italic;">ERF 26,Rendsburger street, Lafrenz Industrial Windhoek, Namibia</p>
+            </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+<footer class="page-footer font-small blue pt-4" style="background-color: black; color: white; box-shadow: 0px 0px 3px grey;   ">
+
+  <!-- Footer Links -->
+  <div class="container-fluid text-center text-md-left">
+
+    <!-- Grid row -->
+    <div class="row">
+
+      <!-- Grid column -->
+      <div class="col-md-6 mt-md-0 mt-3">
+
+        <!-- Content -->
+        <h5 class="text-uppercase">BTresources</h5>
+        <p>Trusted Ecommerce website.</p>
+
+      </div>
+      <!-- Grid column -->
+
+      <hr class="clearfix w-100 d-md-none pb-3">
+
+      <!-- Grid column -->
+      <div class="col-md-3 mb-md-0 mb-3">
+
+        <!-- Links -->
+        <h5 class="text-uppercase">Links</h5>
+
+        <ul class="list-unstyled">
+          <li>
+             <a href="{% url 'ecommerce:index'%}">Home</a>
+          </li>
+
+          <li>
+             <a href="{% url 'Flintwood:store_page'%}">Flintwood</a>
+          </li>
+          <li>
+             <a href="{% url 'TKTitan:store_page'%}">TkTitan</a>
+          </li>
+          <li>
+             <a href="{% url 'Biotech:store_page'%}">Biotech</a>
+          </li>
+         <li>
+             <a href="{% url 'admin_page'%}">Adminstrator</a>
+          </li>
+        </ul>
+
+      </div>
+      <!-- Grid column -->
+
+      <!-- Grid column -->
+
+      <!-- Grid column -->
+
+    </div>
+    <!-- Grid row -->
+
+  </div>
+  <!-- Footer Links -->
+
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-3">© 2018 Copyright:
+    <a href="https://mdbootstrap.com/education/bootstrap/"> MDBootstrap.com</a>
+  </div>
+  <!-- Copyright -->
+
+</footer>
+<!-- Footer -->
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+</html>
