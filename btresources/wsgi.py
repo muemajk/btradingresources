@@ -12,7 +12,7 @@ import os
 from django.core.wsgi import get_wsgi_application
 from dotenv import load_dotenv
 
-project_folder = os.path.expanduser('~/ecommerce/btradingresources/btradingresources/btresources') 
+project_folder = os.path.expanduser('root/ecommerce/btradingresources/btradingresources/btresources') 
 print(project_folder) # adjust as appropriate
 load_dotenv(os.path.join(project_folder, '.env'))
 
