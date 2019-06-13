@@ -86,6 +86,7 @@ WSGI_APPLICATION = 'btresources.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+DB_PASSES = get_env_variable('DB_PASSES')
 
 DATABASES = {
     'default': {
@@ -93,7 +94,7 @@ DATABASES = {
         'HOST': 'localhost',
         'NAME': 'btresources',
         'USER' : 'root',
-        'PASSWORD': 'Htfavkpa3m.',
+        'PASSWORD': DB_PASSES,
         'PORT':'3306',
         'OPTIONS': {
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
