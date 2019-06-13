@@ -86,7 +86,7 @@ WSGI_APPLICATION = 'btresources.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-DB_PASSES = get_env_variable('DB_PASSES')
+DB_PASSES = os.environ['DB_PASSES']
 
 DATABASES = {
     'default': {
