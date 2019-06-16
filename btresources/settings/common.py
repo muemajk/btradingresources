@@ -81,7 +81,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'btresources.wsgi.application'
+WSGI_APPLICATION = 'wsgi.application'
 
 
 # Database
