@@ -91,9 +91,9 @@ DB_PASSES = os.environ['DB_PASSES']
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': 'localhost',
+        'HOST': '75.98.169.74',
         'NAME': 'btresources',
-        'USER' : 'root',
+        'USER' : 'btraders',
         'PASSWORD': DB_PASSES,
         'PORT':'3306',
         'OPTIONS': {
