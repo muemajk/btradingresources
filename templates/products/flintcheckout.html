@@ -15,7 +15,7 @@
   <div class="container-fluid" style="">
     <div class="navbar-header" style="">
       <a class="navbar-brand" href="{% url 'ecommerce:index'%}"><strong>BT</strong>RESOURCES</a>
-      <p style="font-size: 10px;">Your are viewing <a href="">{{comp}}</a>'s products</p>
+      <p style="font-size: 10px;">Your are viewing <a href="{%url 'ecommerce:flint_view'%}">{{comp}}</a>'s products</p>
     </div>
     <ul class="nav navbar-nav" style="display: inline-block; width: 57%; padding-left: 15%; float: right; ">
       <li class="active" style="display: inline-block;  margin-left: 2%;"><a href="{% url 'ecommerce:index'%}" style="text-decoration-color: grey; color: black; font-weight: bold;">HOME</a></li>
@@ -63,7 +63,7 @@
       <tr><td style="text-align: left;"><p><strong>Address for delivery:</strong></p></td><td style="text-align: left;"><p style="font-style: italic;">{{add_prod}}</p></td></tr>
       <tr><td style="text-align: left;"><p><strong>Contact Number:</strong></p></td><td style="text-align: left;"><p style="font-style: italic;">0{{phone_num}}</p></td></tr>
         
-      <tr style="padding-left: 30px;"><td><a href="{% url 'Flintwood:flintordercatch'%}" class="btn btn-primary" >FINALISE ORDER </a></td></tr>
+      <tr style="padding-left: 30px;"><td><a href="{% url 'orders:ordercatch' company='flintwood'%}" class="btn btn-primary" >FINALISE ORDER </a></td></tr>
              
     </table>
 

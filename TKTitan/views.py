@@ -12,7 +12,7 @@ import string
 from random import *
 from orders.models import TktitanOrders
 from .forms import  Checkoutform, Productnumber
-
+from adminstrator.models import freightRate
 
 
 
@@ -85,11 +85,11 @@ def product_page(request, pk):
     cat = prod.Product_Catergory
     print(cat)
     #prodcat= ProductCatergory.objects.filter(id=pro)
-    prodcat = get_object_or_404(ProductCatergory, id=cat.id)
+   
     form = Productnumber(request.POST or None)
     context = {
         'info' : prod,
-        'cat' : prodcat.Catergory,
+        
         'user': 4,
         'form': Productnumber(),
         'prod_count': 1,        
@@ -173,26 +173,35 @@ def TKCart_view(request):
         'form': form,
         'user_name':request.user.username,
         'times' : timezone.now(),
-        'comp': 'TKTITAN'
+        'comp': priv
     }
+    #start
+
     total = 0.0
     total = Decimal(total)
+
+    
     value = 0
     finaltotal= 0
     counter = 0
     for cart in TKCartprods:
-        VaT =Vat['KE']    
-        VaT = Decimal(VaT)
         product_value = cart.price * cart.count
-        value = cart.count * VaT 
+        rates = freightRate.objects.filter(Product_types='Mineral')
+        for rate in rates:
+            VaT = rate.Total_cost
+            cartz = False
+            if cart.count > rate.MiniQuantitySent & cart.count < rate.MaxQuantityRecieved:
+                        cartz = True
         total = total + product_value
         total = round(total,2)
         context['Vat']= VaT
         counter= counter + 1
-
-    finaltotal = total + value
-    finaltotal = round(finaltotal,2)
-    context['final_price']= finaltotal
+    if cartz == True:
+        context['final_price']= int(total + VaT)
+    if cartz == False:
+        context['final_price']= int(total + VaT) 
+    #end
+    
     if form.is_valid():
         newnum = form.cleaned_data.get('size')
         newid =  request.POST.get('ip')
@@ -200,10 +209,10 @@ def TKCart_view(request):
         print(newid)
         TKCart.objects.filter(id=newid).update(count=newnum)
         return redirect('/TKTitan/TKCart/')
-    print(total)
+    print(priv)
     context['TKCart_content'] = TKCart.objects.filter(User_ID=currentUser)
     context['Userid'] =  currentUser
-    context['total_price']= total
+    context['total_price']= int(total)
     
     
     context['memid'] = currentUser
@@ -257,7 +266,7 @@ def checkout(request, pk):
     'times' : timezone.now(),
     'form': 'ghf',
     'user_name':request.user.username,
-    'comp': 'TKTITAN',
+    'comp': priv,
     }
     form = Checkoutform(request.POST or None)
     min_char = 10

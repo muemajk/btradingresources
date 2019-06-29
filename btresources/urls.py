@@ -20,14 +20,21 @@ from django.conf import settings
 
 
 
+
 urlpatterns = [
 	path('', include(('ecommerce.urls', 'ecommerce'), namespace='ecommerce')),
 	path('admin/', admin.site.urls),
 	path('Flintwood/', include(('Flintwood.urls','Flintwood'), namespace='Flintwood')),
 	path('TKTitan/', include(('TKTitan.urls','TKTitan'), namespace='TKTitan')),
-	path('Biotech/', include(('Biotech.urls','Biotech'), namespace='Biotech')),
-	path('orders/', include('orders.urls')),
+	path('Biotec/', include(('Biotech.urls','Biotech'), namespace='Biotech')),
+	path('orders/', include(('orders.urls','orders'), namespace='orders')),
 	path('Users/', include('Users.urls')),
-
-	
+	path('Supplier/', include(('Supplier.urls','Supplier'), namespace='Supplier')),
+	path('FlintwoodSupplier/', include(('FlintSupplier.urls','FlintSupplier'), namespace='FlintSupplier')),
+	path('BiotecSupplier/', include(('BiotechSupplier.urls','BiotechSupplier'), namespace='BiotechSupplier')),
+	path('BTTitanSupplier/', include(('TitanSupplier.urls','TitanSupplier'), namespace='TitanSupplier')),
+	path('adminstrator/', include(('adminstrator.urls','adminstrator'), namespace='adminstrator')),		
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

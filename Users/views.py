@@ -12,7 +12,7 @@ from decimal import Decimal
 import string
 from random import *
 
-from .forms import  LoginForm, RegisterForm ,Privilegeform, addressUpdateform, phoneUpdateform, passwordupdateform, emailform, AltphoneUpdateform
+from .forms import  LoginForm, RegisterForm , addressUpdateform, phoneUpdateform, passwordupdateform, emailform, AltphoneUpdateform, Privilegeform, roleform
 # Create your views here.
 def admin_page(request):
     return redirect('/admin')
@@ -43,8 +43,18 @@ def login_page(request):
                 userid = currentUser.id
                 request.session['userID'] = userid
                 request.session['Usern']= currentUser.username
+                by_client = Client.objects.filter(user=userid)
+                clientinfo= ""
+                for client in by_client:
+                    if client.role == "buyer":
+                        return redirect('/Users/profile/')
+                    elif client.role == "supplier":
+                        return redirect('/Supplier/')
+                        
+
                 print(request.session['userID'])
                 return redirect('/Users/profile/')
+                
         else:
             
             print("Error!") 
@@ -57,11 +67,9 @@ Users = get_user_model()
 def register_page(request):
     logout(request)
     form = RegisterForm(request.POST or None)
-    pform = Privilegeform(request.POST or None)
     template = loader.get_template('members/register.html')
     context = {
         'form' : form,
-        'pform' : pform,
     }
     if form.is_valid():
         
@@ -70,35 +78,53 @@ def register_page(request):
         lastname = form.cleaned_data.get("lastname")
         emailad = form.cleaned_data.get("email")
         phone = form.cleaned_data.get("phone")
-        altphone = form.cleaned_data.get("Alternate_phone")
+        altphone = form.cleaned_data.get("Whatsapp_phone_number")
         skype = form.cleaned_data.get("Skype")
         wechat = form.cleaned_data.get("We_Chat")
         physical_address = form.cleaned_data.get("physical_address")
         country = form.cleaned_data.get("country")
         passwords = form.cleaned_data.get("password")
+        priv = form.cleaned_data.get('privilege')
+        role = form.cleaned_data.get('role')
+
         new_user = Users.objects.create_user(user_name, emailad, passwords)
         new_user.last_name = lastname
         new_user.first_name = firstname
         
         new_user.save()
 
-        print(new_user)
+        #print(role)
         user = authenticate(request, username=user_name, password=passwords)
         if user is not None:
-            logout(request)
             request.session['userID'] = ''
+            #print(role)
             login(request,user)
             #user_logged_in.send(user.__class__, instance=user, request = request)
             if request.user.is_authenticated:
                 currentUser = request.user
                 #print(currentUser.id)
+                print(role)
                 request.session['userID'] = currentUser.id
                 request.session['Usern']= currentUser.username
-                if pform.is_valid():
-                    privilege = pform.cleaned_data.get("privilege")
-                    new_client = Client(user=currentUser,physical_address=physical_address,privilege=privilege,Country=country,phonenumber=phone, Alternate_phonenumber =altphone, WeChat=wechat , Skype= skype )
-                    if new_client.save():
-                        return redirect('/Users/profile/')
+                print(request.session['Usern'])
+                new_client = Client(user=currentUser,physical_address=physical_address,role= role,privilege=priv,Country=country,phonenumber=phone, Alternate_phonenumber =altphone, WeChat=wechat , Skype= skype )
+                new_client.save()
+                
+                if role == 'buyer':
+                    return redirect('/Users/profile/')
+                elif role == 'Flintwood_supplier':
+                    return redirect('/FlintwoodSupplier/')
+                elif role == 'btsupplier':
+                    return redirect('/BTTitanSupplier/')
+                elif role == 'biotec_supplier':
+                    return redirect('/BiotecSupplier/')
+
+                login(request,user)
+                print(user)
+
+
+
+                        
 
 
                 
@@ -222,6 +248,12 @@ def update_email_to_user(request,pk):
 
 
 
+
+
+
+
+
+
 def logout_view(request):
     logout(request)
     try:
@@ -229,5 +261,5 @@ def logout_view(request):
         del request.session['userID']
     except KeyError:
         pass
-    return redirect('/ecommerce')
+    return redirect('/')
 

@@ -13,7 +13,7 @@ import string
 from random import *
 import json
 from .forms import  Checkoutform, Productnumber
-
+from adminstrator.models import freightRate
 
 
 # Create your views here.
@@ -172,26 +172,29 @@ def FlintCart_view(request):
         'form': form,
         'user_name':request.user.username,
         'times' : timezone.now(),
-        'comp': 'FLINTWOOD'
+        'comp': priv
     }
     total = 0.0
     total = Decimal(total)
+
+    
     value = 0
     finaltotal= 0
     counter = 0
+    VaT = 0
     for flintcart in FlintCartprods:
-        VaT =Vat['KE']    
-        VaT = Decimal(VaT)
         product_value = flintcart.price * flintcart.count
-        value = flintcart.count * VaT 
+        rates = freightRate.objects.filter(Product_types='fresh_food')
+        for rate in rates:
+            VaT = rate.Total_cost
+            if flintcart.count >= rate.MiniQuantitySent & flintcart.count <= rate.MaxQuantityRecieved:
+                finalcost = VaT
         total = total + product_value
         total = round(total,2)
         context['Vat']= VaT
         counter= counter + 1
 
-    finaltotal = total + value
-    finaltotal = round(finaltotal,2)
-    context['final_price']= finaltotal
+    context['final_price']= int(total + finalcost)
     if form.is_valid():
         newnum = form.cleaned_data.get('size')
         newid =  request.POST.get('ip')
@@ -202,7 +205,7 @@ def FlintCart_view(request):
     print(total)
     context['FlintCart_content'] = FlintCart.objects.filter(User_ID=currentUser)
     context['Userid'] =  currentUser
-    context['total_price']= total
+    context['total_price']=  int(total)
     
     
     context['memid'] = currentUser

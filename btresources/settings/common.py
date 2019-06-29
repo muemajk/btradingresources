@@ -18,23 +18,24 @@ print(BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
-CSRF_COOKIE_SECURE = True
+#CSRF_COOKIE_SECURE = True
 
-SESSION_COOKIE_SECURE = True
+#SESSION_COOKIE_SECURE = True
 
 
-SECURE_SSL_REDIRECT = True
+#SECURE_SSL_REDIRECT = True
 
-SECURE_CONTENT_TYPE_NOSNIFF  = True
+#SECURE_CONTENT_TYPE_NOSNIFF  = True
 
-SECURE_BROWSER_XSS_FILTER = True
+#SECURE_BROWSER_XSS_FILTER = True
 
-SECURE_HSTS_SECONDS = 3600
-SECURE_HSTS_PRELOAD = True
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+#SECURE_HSTS_SECONDS = 3600
+#SECURE_HSTS_PRELOAD = True
+#SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 # Application definition
 
 INSTALLED_APPS = [
+    'adminstrator',
     'ecommerce',
     'Flintwood',
     'Biotech',
@@ -49,7 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-X_FRAME_OPTIONS = 'DENY'
+#X_FRAME_OPTIONS = 'DENY'
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -57,7 +58,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+ #   'django.middleware.clickjacking.XFrameOptionsMiddleware',
     
 ]
 
@@ -86,14 +87,15 @@ WSGI_APPLICATION = 'btresources.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-DB_PASSES = os.environ['DB_PASSES']
+#DB_PASSES = os.environ['DB_PASSES']
+DB_PASSES ='Htfavkpa3m.'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'HOST': '75.98.169.74',
+        'HOST': 'localhost',
         'NAME': 'btresources',
-        'USER' : 'btraders',
+        'USER' : 'root',
         'PASSWORD': DB_PASSES,
         'PORT':'3306',
         'OPTIONS': {

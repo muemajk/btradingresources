@@ -11,8 +11,9 @@ from django.urls import reverse
 from decimal import Decimal
 import string
 from random import *
-
+from adminstrator.models import freightRate
 from .forms import  Checkoutform, Productnumber
+
 
 
 
@@ -119,9 +120,11 @@ def addtoCart(request, pk, size):
         if priv == 'biotech' or priv == 'all':
             request.session['userID']= userid
         else:
-            return   redirect('/Users/login/')
+            print('I dont know the privilegess')
+            #return   redirect('/Users/login/')
     else:
-         return   redirect('/Users/login/')
+        print('I dont know the logzzz')
+         #return   redirect('/Users/login/')
     #get user info
     currentUser = request.session['userID']
     
@@ -136,7 +139,7 @@ def addtoCart(request, pk, size):
     newdes = descr + '...'
     bp = Cart(User_ID=request.user,Product_name=Product_name, Product_description=newdes, price=pdo.price , count =size, ProductID=pdo)
     bp.save()
-    return redirect('/Biotech/Cart/')    
+    return redirect('/Biotec/Cart/')    
 
 
 def cart_view(request):
@@ -147,12 +150,15 @@ def cart_view(request):
         priv = ""
         for client in by_client:
             priv = client.privilege
+
         if priv == 'biotech' or priv == 'all':
             request.session['userID']= userid
         else:
-            return   redirect('/Users/login/')
+            print('I dont know the privilege')
+           # return   redirect('/Users/login/')
     else:
-         return   redirect('/Users/login/')
+        print('I dont know the logs')
+         #return   redirect('/Users/login/')
     currentUser = request.session['userID']
     #usern =request.session['Usern']
     form = Productnumber(request.POST or None)
@@ -173,26 +179,34 @@ def cart_view(request):
         'form': form,
         'user_name':request.user.username,
         'times' : timezone.now(),
-        'comp': 'BIOTECH'
+        'comp': priv
     }
+#start
+
     total = 0.0
     total = Decimal(total)
+
+    VaT=0
     value = 0
     finaltotal= 0
     counter = 0
     for cart in cartprods:
-        VaT =Vat['KE']    
-        VaT = Decimal(VaT)
+        print(cart.count)
         product_value = cart.price * cart.count
-        value = cart.count * VaT 
+        rates = freightRate.objects.filter(Product_types='Medicine')
+        for rate in rates:
+            VaT = rate.Total_cost
+            if cart.count >= rate.MiniQuantitySent & cart.count <= rate.MaxQuantityRecieved:
+                finalcost =VaT
         total = total + product_value
         total = round(total,2)
         context['Vat']= VaT
         counter= counter + 1
 
-    finaltotal = total + value
-    finaltotal = round(finaltotal,2)
-    context['final_price']= finaltotal
+    context['final_price']= int(total+finalcost)
+
+    #end
+  
     if form.is_valid():
         newnum = form.cleaned_data.get('size')
         newid =  request.POST.get('ip')
@@ -200,10 +214,10 @@ def cart_view(request):
         print(newid)
         Cart.objects.filter(id=newid).update(count=newnum)
         return redirect('/Biotech/Cart/')
-    print(total)
+    #print(product_value)
     context['cart_content'] = Cart.objects.filter(User_ID=currentUser)
     context['Userid'] =  currentUser
-    context['total_price']= total
+    context['total_price']= int(total)
     
     
     context['memid'] = currentUser
@@ -215,18 +229,18 @@ def cart_view(request):
 
 def calculate_cart(request):
     
-    return redirect('/Biotech/Cart/')
+    return redirect('/Biotec/Cart/')
 
 def delete_from_cart(request, pk):
     Cart.objects.filter(id=pk).delete()
-    return redirect('/Biotech/Cart/')
+    return redirect('/Biotec/Cart/')
 
 
 
 
 def clear_whole_cart(request, pk):
     Cart.objects.filter(User_ID=pk).delete()
-    return redirect('/Biotech/Cart/')
+    return redirect('/Biotec/Cart/')
 
 
 

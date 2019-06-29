@@ -48,21 +48,24 @@
       <p>fill in this form to sign up</p>
       <div class="row" style="text-align: left;">
 
-    <div class="col-sm-6 col-12">
+    <div class="col-sm-6 col-12"><ul style="list-style-type: none;">
     <form method="POST">{% csrf_token %}
-      {{ form }}
-      {{ pform }}
+      
+      {% for field in form  %}
+    {{ field.errors }}
+    <li> {{ field.label_tag }} {{ field }} </li> 
+  {% endfor %}
       <br><table>
         <tr>
           <td>
-            <a class="btn btn-default" href="{% url 'index'%}">CANCEL</a>
+            <a class="btn btn-default" href="{% url 'ecommerce:index'%}">CANCEL</a>
           </td>
           <td>
             <button type="submit" class="btn btn-primary">SUBMIT & CONTINUE</button>
           </td>
         </tr>
       </table>
-    </form>
+    </form></ul>
   
 
     </div>

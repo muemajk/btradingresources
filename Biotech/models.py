@@ -16,11 +16,17 @@ class ProductCatergory(models.Model):
 class Product(models.Model):
     pid = models.IntegerField(primary_key=True, default=1)
     name = models.CharField(max_length=254, default='')
-    Product_Catergory = models.ForeignKey(ProductCatergory,default=1,verbose_name = "Catergory", on_delete = models.SET_DEFAULT)
+    Brand_Name = models.CharField(max_length=254, default='')
+    Product_Catergory = models.CharField(max_length=254, default='Mineral')
     description = models.TextField(max_length=2000)
+    origin = models.CharField(max_length=254, default='')
     price = models.DecimalField(max_digits=6, decimal_places=2)
     image = models.ImageField(upload_to='product_images')
     stock = models.IntegerField()
+    Unit = models.CharField(max_length=254, default='grams')
+    biosupplierid = models.ForeignKey(User, default=1, verbose_name = "User", on_delete = models.SET_DEFAULT, related_name='biotech_supplier')
+    Packaging = models.CharField(max_length=254, default='')
+    Active = models.BooleanField(default=False)
 
 
     def __str__(self):

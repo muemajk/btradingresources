@@ -18,7 +18,7 @@
       <p style="font-size: 10px;">Your are viewing <a href="{% url 'ecommerce:biotec_view'%}">{{comp}}</a>'s products</p>
     </div>
     <ul class="nav navbar-nav" style="display: inline-block; width: 57%; padding-left: 15%; float: right; ">
-      <li class="active" style="display: inline-block;  margin-left: 2%;"><a href="{% url 'index'%}" style="text-decoration-color: grey; color: black; font-weight: bold;">HOME</a></li>
+      <li class="active" style="display: inline-block;  margin-left: 2%;"><a href="{% url 'ecommerce:index'%}" style="text-decoration-color: grey; color: black; font-weight: bold;">HOME</a></li>
       <li class="dropdown" style="display: inline-block; margin-left: 2%; font-weight: bold;">
         <a href="{% url 'ecommerce:biotec_view'%}"style="text-decoration-color: black; color: black; font-weight: bold;">{{comp}}</a>
         
@@ -52,82 +52,80 @@
           <div class="title" style="font-size: 17px; font-weight: bolder;"  >
            {{user}}'s Shopping Cart
           </div>
-         <table style="display: inline-block; background-color: orange; width: 100%;  "><tr>
-          <td><div class="image" style="display: inline-block; background-color: green;  text-align: left; width: 180px; ">
+         <table class="table table-striped" style=" width: auto; font-size: 8px; padding: 1%; "><thead><tr>
+          <td><div class="image" style="display: inline-block;text-align: left; width: 180px; ">
               
               <span><p style="font-weight: bolder;">PRODUCT</p></span>
             </div></td>
           <td style="width: 100%;">
-            <div class="description" style="display: inline-block; background-color: yellow; width: 330px;">
+            <div class="description" style="display: inline-block;width: 330px;">
               <span><p style="font-weight: bolder;">PRODUCT DESCRIPTION</p></span>
               
             </div></td>
-            <td style="width: 100%;"><div class="description" style="display: inline-block; background-color: red; width: 175px;">
+            <td style="width: 100%;"><div class="description" style="display: inline-block;width: 175px;">
               <span><p style="font-weight: bolder;">PRODUCT ADDED ON</p></span>
               
             </div>
             </td>
 
-            <td style="width: 100%;"><div class="description" style="display: inline-block; background-color: red; width: 130px;">
+            <td style="width: 100%;"><div class="description" style="display: inline-block;  width: 130px;">
              <span style="width: auto;"><p style="font-weight: bolder;">ORDER SIZE</p></span>
               
             </div>
             </td>
-            <td style="width: 100%;"><div class="description" style="display: inline-block; background-color: red; width: 150px;">
+            <td style="width: 100%;"><div class="description" style="display: inline-block; width: 150px;">
               <span><p style="font-weight: bolder;">PRODUCT PRICE</p></span>
               
             </div>
             </td>
 
-            <td style="width: 100%;"><div class="description" style="display: inline-block; background-color: red; width: 150px;">
+            <td style="width: 100%;"><div class="description" style="display: inline-block; width: 150px;">
              <span style="width: auto;"><p style="font-weight: bolder;">ACTION</p></span>
               
             </div>
             </td><button class="btn btn-default" style=" float: right; text-decoration: none;" ><a href = "{% url 'Biotech:store_page'%}" style="font-size: 12px;">ADD</a></button>
-          </tr>
-        </table><hr><hr>
+          </tr></thead>
           <!-- Product #1 -->
-
+<tbody>
           {%if cart_content == ""%}
-          <div class="row" style="font-style: italic; display: inline-block;  background-color: green; width: 16%; text-align: left; ">
+         <tr> <div class="row" style="font-style: italic; display: inline-block;  width: 16%; text-align: left; ">
               <p style="font-weight: bolder; ">Your Cart is empty, Shop and add to cart!!</p>
-            </div>
+            </div></tr>
           {%elif cart_content != "" %}
               {% for product in cart_content %}
               
-                <div class="image" style="font-style: italic; display: inline-block;  background-color: green; width: 16%; text-align: left; ">
+                <tr><td>
                   <img src="{{product.image.url}}" alt="" />
-                  <span><p style="font-weight: bolder;">{{product.Product_name}}</p></span>
-                </div>
+                  <span><p style="font-weight: bolder;font-size: 12px;">{{product.Product_name}}</p></span>
+                </td>
               
-                <div class="description" style="font-style: italic; display: inline-block; background-color: yellow; width: 30%;">
-                  <span><p style="font-size: 12px;">{{product.Product_description}}</p></span>
-                  
-                </div>
+                <td>
+                  <span><p style="font-size: 12px;">{{product.Product_description}}</p></span></td>
 
-                <div class="description" style="font-style: italic; display: inline-block; background-color: red; width: 16%;">
-                  <span>{{product.date_created}}</span>
-                  
-                </div>
+                <td><span><p style="font-size: 12px;">{{product.date_created}}</p></span>
+                  </td>
              
              
-                <div class="product-price" style=" font-style: italic; display: inline-block;width: 10%; margin-left: 1%;"><p style=" font-weight: bold">({{product.count}} units)</p>
-                <form method="POST">{% csrf_token %}
-                {{form}}
+               <td><div class="description" style="display: inline-block; width: 130px; height: 150px;">
+                
+                  <p style=" font-weight: bold">({{product.count}} units)</p><br><table>
+                    <form method="POST" style="width: auto;">{% csrf_token %}
+                {{form.as_table}}
                 <input type='hidden' name='ip' value='{{product.id}}'>
-                <button type="submit" class="btn btn-default" style="font-size: 10px; padding: 0px;">Up date </button>
-              </form></div>
-                <div class="product-price" style=" font-style: italic; display: inline-block;width: 13%; margin-left: 1%;">USD: {{product.price}} per item</div>
+                <button type="submit" class="btn btn-default" style="font-size: 10px; padding: 0px;">Up date </button></form></table>
+              </div></td>
+                <td><span><p style="font-size: 12px;">USD: {{product.price}} per item</p></span></td>
 
-                <div class="description" style="display: inline-block; width: 10%;">
+                <td><div class="description" style="display: inline-block; width: 10%;">
                   
                    <a href="{% url 'Biotech:delete_from_cart' pk=product.id%}">Remove</a>
                   
-                </div>
-                <hr>
+                </div></td></tr>
+                
               
                 {% endfor %}
             {%endif%} 
+            </tbody></table>
             <div class="row" style=" display: inline-block; margin:5%; float: right;  width: auto;">
                <div class="total-price" style=" display: inline-block; margin:5%; float: right;">
                 <a href="{% url 'Biotech:clear_whole_cart' pk=memid%}" style="text-decoration: none; float: right;">CLEAR CART</a>
@@ -137,17 +135,16 @@
                     <td style="text-align: center;">{{total_price}} USD</td>
                   </tr>
                   <tr>
-                    <td><h6 style="font-style: italic;">VAT per item: </h6></td>
-                    <td style="text-align: center;">{{Vat}} USD </td>
+                    <td><h6 style="font-style: italic;">VAT: </h6></td>
+                    <td style="text-align: center;">{{Vat}} USD</td>
                   </tr>
-
                   <tr>
-                    <td><h6 style="font-style: italic;">FINAL TOTAL: </h6></td>
-                    <td style="text-align: center; font-weight: bold;">{{final_price}} USD</td>
+                    <td><h6 style="font-style: italic;">ORDER TOTAL: </h6></td>
+                    <td style="text-align: center;">{{final_price}} USD</td>
                   </tr>
                   <tr>
                     <td><button class="btn btn-default" style=" display: inline-block; margin:5%; float: right; box-shadow: 3px 3px 3px grey;"><a href="{% url 'Biotech:calculate_cart' %}" style="text-decoration: none;">RECALCULATE</a></button></td>
-                    <td><button class="btn btn-primary" style=" display: inline-block; margin:5%; float: right; box-shadow: 3px 3px 3px grey;"><a href="{% url 'Biotech:checkout' pk=memid%}" style=" text-decoration-color: black; color: black; text-decoration: none;">ORDER</a></button></td>
+                    <td><button class="btn btn-primary" style=" display: inline-block; margin:5%; float: right; box-shadow: 3px 3px 3px grey;"><a href="{% url 'orders:orders'  company=comp price=total_price %}" style=" text-decoration-color: black; color: black; text-decoration: none;">ORDER</a></button></td>
                   </tr>
                 </table>
                </div><br>

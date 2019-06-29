@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import Client
-
+from django_countries.fields import CountryField
 
 
 
@@ -26,12 +26,15 @@ class LoginForm(forms.Form):
 
 
 
-class RegisterForm(forms.Form):
+class RegisterForm(forms.ModelForm):
+
+
 	firstname = forms.CharField(
 			widget=forms.TextInput(
 				attrs={'class' : 'form-control',
 				'id': 'form_firstname',
 				 'placeholder':'Your firstname'
+				 
 				 }
 				 )
 			)
@@ -84,11 +87,11 @@ class RegisterForm(forms.Form):
 			 }
 			 )
 		)
-	Alternate_phone = forms.CharField(
+	Whatsapp_phone_number = forms.CharField(
 		widget=forms.TextInput(
 			attrs={'class' : 'form-control',
 			'id': 'form_alternate_phone',
-			 'placeholder':'Your alternate phone number'
+			 'placeholder':'Your Whatsapp phone number'
 			 }
 			 )
 		)
@@ -118,18 +121,14 @@ class RegisterForm(forms.Form):
 			 )
 		)
 
-	country = forms.CharField(
-		widget=forms.TextInput(
-			attrs={'class' : 'form-control',
-			'id': 'form_country',
-			 'placeholder':'Your country'
-			 }
-			 )
-		)
+	country =  CountryField(blank_label='(select country)').formfield()
 
 
 
 
+	class Meta:
+		model = Client
+		fields = ['privilege','role']
 
 	def clean(self):
 		data = self.cleaned_data
@@ -159,10 +158,9 @@ class RegisterForm(forms.Form):
 
 
 
-class Privilegeform(forms.ModelForm):
-	class Meta:
-		model = Client
-		fields = ['privilege']
+
+
+
 
 
 		
@@ -219,7 +217,18 @@ class passwordupdateform(forms.Form):
 		return data
 
 
+class Privilegeform(forms.ModelForm):
 
+	class Meta:
+		model = Client
+		fields = ['privilege']	
+
+
+class roleform(forms.ModelForm):
+
+	class Meta:
+		model = Client
+		fields = ['role']
 
 class phoneUpdateform(forms.Form):
 	phone = forms.CharField(

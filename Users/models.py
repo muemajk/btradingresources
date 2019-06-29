@@ -33,15 +33,23 @@ class Employee(models.Model):
 COMPANY_CHOICES = (
     ('flintwood','FLINTWOOD'),
     ('biotech', 'BIOTECH'),
-    ('tktitan','TKTITAN'),
+    ('tktitan','BTTITAN'),
     ('all','ALL'),
     ('none','NONE'),
+)
+
+USER_CHOICES = (
+    ('buyer','BUYER'),
+    ('Flintwood_supplier', 'FLINTWOOD SUPPLIER'),
+    ('btsupplier', 'BTTITAN SUPPLIER'),
+    ('biotec_supplier', 'BIOTEC SUPPLIER'   ),
 )
 
 class Client(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     physical_address=models.CharField(max_length=200 )
-    privilege=models.CharField(max_length=10 , choices=COMPANY_CHOICES, default='none' )
+    role=models.CharField(max_length=30 , choices=USER_CHOICES, default='buyer' )
+    privilege=models.CharField(max_length=30 , choices=COMPANY_CHOICES, default='none' )
     Country=models.CharField(max_length=200 )
     phonenumber=models.CharField(max_length=15)
     Alternate_phonenumber=models.CharField(max_length=15, default='none')

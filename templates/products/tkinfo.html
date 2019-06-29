@@ -15,10 +15,10 @@
   <div class="container-fluid" style="">
     <div class="navbar-header" style="">
       <a class="navbar-brand" href="{% url 'ecommerce:index'%}"><strong>BT</strong>RESOURCES</a>
-      <p style="font-size: 10px;">Your are viewing <a href="{%url 'index'%}">{{comp}}</a>'s products</p>
+      <p style="font-size: 10px;">Your are viewing <a href="{%url 'ecommerce:index'%}">{{comp}}</a>'s products</p>
     </div>
     <ul class="nav navbar-nav" style="display: inline-block; width: 57%; padding-left: 15%; float: right; ">
-      <li class="active" style="display: inline-block;  margin-left: 2%;"><a href="{% url 'index'%}" style="text-decoration-color: grey; color: black; font-weight: bold;">HOME</a></li>
+      <li class="active" style="display: inline-block;  margin-left: 2%;"><a href="{% url 'ecommerce:index'%}" style="text-decoration-color: grey; color: black; font-weight: bold;">HOME</a></li>
       <li class="dropdown" style="display: inline-block; margin-left: 2%; font-weight: bold;">
         <a href="{% url 'ecommerce:tk_view'%}"style="text-decoration-color: black; color: black; font-weight: bold;">{{comp}}</a>
         
@@ -58,7 +58,7 @@
                 {{form}}<button type="submit" class="btn btn-default" style="font-size: 10px;">CHANGE</button>
               </form></div>
               <img src="..\..\..{{info.image.url}}" width="50%" height="30%" style=" margin-top: 30px;">              
-              <p style=" font-size: 15px; font-style: italic;" >{{cat}}</p>
+              <p style=" font-size: 15px; font-style: italic;" >{{info.Product_Catergory}}</p>
               <h6 style="font-weight: bold;">Description:</h6>
               <p>{{info.description}} </p>
               <p style="font-weight: bold;  font-style: italic; display: inline-block;  float: right;" >Price : {{info.price}} KSH</p>
