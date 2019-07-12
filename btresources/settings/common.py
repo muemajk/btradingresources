@@ -88,7 +88,7 @@ WSGI_APPLICATION = 'btresources.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 #DB_PASSES = os.environ['DB_PASSES']
-DB_PASSES ='Htfavkpa3m.'
+DB_PASSES ='12'
 
 DATABASES = {
     'default': {
