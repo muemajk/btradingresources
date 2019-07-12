@@ -33,7 +33,7 @@ class Employee(models.Model):
 COMPANY_CHOICES = (
     ('flintwood','FLINTWOOD'),
     ('biotech', 'BIOTECH'),
-    ('tktitan','BTTITAN'),
+    ('bttitan','BTTITAN'),
     ('all','ALL'),
     ('none','NONE'),
 )
@@ -42,7 +42,7 @@ USER_CHOICES = (
     ('buyer','BUYER'),
     ('Flintwood_supplier', 'FLINTWOOD SUPPLIER'),
     ('btsupplier', 'BTTITAN SUPPLIER'),
-    ('biotec_supplier', 'BIOTEC SUPPLIER'   ),
+    ('biotec_supplier', 'BIOTEC SUPPLIER'),
 )
 
 class Client(models.Model):

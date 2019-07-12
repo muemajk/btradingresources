@@ -41,11 +41,12 @@ def store_page(request):
          return   redirect('/Users/login/')
     usez = None
     context = {
-        'user_content':  Product.objects.all(),
+        'user_content':  Product.objects.filter(Active=True),
         'user_name': usez,
         'times' : timezone.now(),
         'img': 'none',
-        'comp': 'BIOTECH'
+        'comp': 'BIOTECH',
+        'user': Client.objects.filter(user=request.user)
     }
     photo =  Product.objects.all()
     pic=''
@@ -54,12 +55,12 @@ def store_page(request):
         print(pic)
     if request.user.is_authenticated:
         username = request.user.username
-        context['user_content'] =  Product.objects.all()
+        context['user_content'] =  Product.objects.filter(Active=True)
         context['user_name']= username
         context['img'] = pic
-    template = loader.get_template('products/store.html') 
+    template = loader.get_template('products/store.html')
 
-    
+
     return HttpResponse(template.render(context,request))
 
 
@@ -79,7 +80,7 @@ def product_page(request, pk):
             return   redirect('/Users/login/')
     else:
          return   redirect('/Users/login/')
-     
+
     user_name= None
     prod = get_object_or_404(Product,pid=pk)
     #for pro in prod:
@@ -91,12 +92,13 @@ def product_page(request, pk):
     context = {
         'info' : prod,
         'cat' : prodcat.Catergory,
-        'user': 4,
+        'userss': 4,
         'form': Productnumber(),
-        'prod_count': 1,        
+        'prod_count': 1,
         'user_name':request.user.username,
         'times' : timezone.now(),
         'comp': 'BIOTECH',
+        'user': Client.objects.filter(user=request.user),
     }
     if form.is_valid():
         size = form.cleaned_data.get('size')
@@ -127,19 +129,19 @@ def addtoCart(request, pk, size):
          #return   redirect('/Users/login/')
     #get user info
     currentUser = request.session['userID']
-    
+
     #get product info
     pdo = Product.objects.get(pid=pk)
     Product_name = pdo.name
     #get Member info
-    
+
     descr = pdo.description
     descr = descr[:75]
 
     newdes = descr + '...'
     bp = Cart(User_ID=request.user,Product_name=Product_name, Product_description=newdes, price=pdo.price , count =size, ProductID=pdo)
     bp.save()
-    return redirect('/Biotec/Cart/')    
+    return redirect('/Biotec/Cart/')
 
 
 def cart_view(request):
@@ -169,17 +171,19 @@ def cart_view(request):
     cartprods = Cart.objects.filter(User_ID=currentUser)
 
     Vat= {'KE': 0.875, 'UG': 0.965, 'NAM' : 0.905}
-    context = {   
+    context = {
         'cart_content': '',
         'Userid': 4,
         'total_price': 0,
         'Vat':0,
-        'user': request.user.username,
+
         'memid': 0,
         'form': form,
         'user_name':request.user.username,
         'times' : timezone.now(),
-        'comp': priv
+        'comp': priv,
+        'user': Client.objects.filter(user=request.user)
+
     }
 #start
 
@@ -206,7 +210,7 @@ def cart_view(request):
     context['final_price']= int(total+finalcost)
 
     #end
-  
+
     if form.is_valid():
         newnum = form.cleaned_data.get('size')
         newid =  request.POST.get('ip')
@@ -218,8 +222,8 @@ def cart_view(request):
     context['cart_content'] = Cart.objects.filter(User_ID=currentUser)
     context['Userid'] =  currentUser
     context['total_price']= int(total)
-    
-    
+
+
     context['memid'] = currentUser
     template = loader.get_template('products/cart.html')
 
@@ -228,7 +232,7 @@ def cart_view(request):
 
 
 def calculate_cart(request):
-    
+
     return redirect('/Biotec/Cart/')
 
 def delete_from_cart(request, pk):
@@ -245,7 +249,7 @@ def clear_whole_cart(request, pk):
 
 
 
-#this view is for the product checkout. it contains the product on 'add to cart' checkout details 
+#this view is for the product checkout. it contains the product on 'add to cart' checkout details
 def checkout(request, pk):
     if request.user.is_authenticated:
         currentUser = request.user
@@ -272,6 +276,7 @@ def checkout(request, pk):
     'form': 'ghf',
     'user_name':request.user.username,
     'comp': 'BIOTECH',
+    'user': Client.objects.filter(user=request.user),
     }
     form = Checkoutform(request.POST or None)
     min_char = 10
@@ -284,16 +289,16 @@ def checkout(request, pk):
     Vat= {'KE': 0.875, 'UG': 0.965, 'NAM' : 0.905}
     total = 0.0
     total = Decimal(total)
-    VaT =Vat['KE']    
+    VaT =Vat['KE']
     VaT = Decimal(VaT)
     finaltotal= 0.0
     for cart in to_buy:
         size_to_buy =size_to_buy+cart.count
         value_of_cart = cart.price * cart.count
-        total = total + value_of_cart 
+        total = total + value_of_cart
         value = cart.count * VaT
 
-    if total>0:   
+    if total>0:
         finaltotal = total + value
         finaltotal = round(finaltotal,2)
     else:
@@ -304,7 +309,7 @@ def checkout(request, pk):
     for client in by_client:
         context['phone_num']=client.phonenumber
         context['add_prod']= client.physical_address
-    context['num_prod']= size_to_buy  
+    context['num_prod']= size_to_buy
     context['price_prod']=finaltotal
     context['serialCode'] = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
     context['form'] = Checkoutform()
@@ -335,21 +340,21 @@ def boiordercatch(request):
     ordval = ''
     count = 1
     for orders in cartorders:
-        
+
         ordval = str(count)+').'+ orders.Product_name +'('+str(orders.count)+ "),"
         count += 1
         ordlist.append(ordval)
-    
+
     #print(ordlist)
 
     min_char = 10
     max_char = 12
     allchar = string.ascii_letters + string.digits
-    serialcode = "".join(choice(allchar) for x in range(randint(min_char, max_char)))      
+    serialcode = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
 
-    products_ordered = ''.join(ordlist) 
-         
-    
+    products_ordered = ''.join(ordlist)
+
+
 
     print(products_ordered)
     neword = BiotechOrders(OrderID=serialcode,OrderDate= timezone.now(),OrderList=products_ordered,Order_Payment=False,user=currentUser)

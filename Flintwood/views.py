@@ -37,14 +37,15 @@ def store_page(request):
         else:
             return   redirect('/Users/login/')
     else:
-         return   redirect('/Users/login/')  
+         return   redirect('/Users/login/')
     usez = None
     context = {
-        'user_content':  Product.objects.all(),
+        'user_content':  Product.objects.filter(Active=True),
         'user_name': usez,
         'times' : timezone.now(),
         'img': 'none',
-        'comp': 'FLINTWOOD'
+        'comp': 'FLINTWOOD',
+        'user': Client.objects.filter(user=request.user),
     }
     pic=''
     photo =  Product.objects.all()
@@ -53,12 +54,12 @@ def store_page(request):
         print(pic)
     if request.user.is_authenticated:
         username = request.user.username
-        context['user_content'] =  Product.objects.all()
+        context['user_content'] =  Product.objects.filter(Active=True)
         context['user_name']= username
         context['img'] = pic
-    template = loader.get_template('products/flintstore.html') 
+    template = loader.get_template('products/flintstore.html')
 
-    
+
     return HttpResponse(template.render(context,request))
 
 
@@ -77,7 +78,7 @@ def product_page(request, pk):
         else:
             return   redirect('/Users/login/')
     else:
-         return   redirect('/Users/login/')     
+         return   redirect('/Users/login/')
     user_name= None
     prod = get_object_or_404(Product,pid=pk)
     #for pro in prod:
@@ -91,7 +92,7 @@ def product_page(request, pk):
         'cat' : prodcat.Catergory,
         'user': 4,
         'form': Productnumber(),
-        'prod_count': 1,        
+        'prod_count': 1,
         'user_name':request.user.username,
         'times' : timezone.now(),
         'comp': 'FLINTWOOD',
@@ -123,19 +124,19 @@ def addtoFlintCart(request, pk, size):
          return   redirect('/Users/login/')
     #get user info
     currentUser = request.session['userID']
-    
+
     #get product info
     pdo = Product.objects.get(pid=pk)
     Product_name = pdo.name
     #get Member info
-    
+
     descr = pdo.description
-    descr = descr[:75]
+    descr = descr[:375]
 
     newdes = descr + '...'
     bp = FlintCart(User_ID=request.user,Product_name=Product_name, Product_description=newdes, price=pdo.price , count =size, ProductID=pdo)
     bp.save()
-    return redirect('/Flintwood/FlintCart/')    
+    return redirect('/Flintwood/FlintCart/')
 
 
 def FlintCart_view(request):
@@ -162,26 +163,28 @@ def FlintCart_view(request):
     FlintCartprods = FlintCart.objects.filter(User_ID=currentUser)
 
     Vat= {'KE': 0.875, 'UG': 0.965, 'NAM' : 0.905}
-    context = {   
+    context = {
         'FlintCart_content': '',
         'Userid': 4,
         'total_price': 0,
         'Vat':0,
-        'user': request.user.username,
+
         'memid': 0,
         'form': form,
         'user_name':request.user.username,
         'times' : timezone.now(),
-        'comp': priv
+        'comp': priv,
+        'user': Client.objects.filter(user=request.user),
     }
     total = 0.0
     total = Decimal(total)
 
-    
+
     value = 0
     finaltotal= 0
     counter = 0
     VaT = 0
+    finalcost=0
     for flintcart in FlintCartprods:
         product_value = flintcart.price * flintcart.count
         rates = freightRate.objects.filter(Product_types='fresh_food')
@@ -206,8 +209,8 @@ def FlintCart_view(request):
     context['FlintCart_content'] = FlintCart.objects.filter(User_ID=currentUser)
     context['Userid'] =  currentUser
     context['total_price']=  int(total)
-    
-    
+
+
     context['memid'] = currentUser
     template = loader.get_template('products/flintcart.html')
 
@@ -216,7 +219,7 @@ def FlintCart_view(request):
 
 
 def calculate_FlintCart(request):
-    
+
     return redirect('/Flintwood/FlintCart/')
 
 def delete_from_FlintCart(request, pk):
@@ -233,7 +236,7 @@ def clear_whole_FlintCart(request, pk):
 
 
 
-#this view is for the product checkout. it contains the product on 'add to FlintCart' checkout details 
+#this view is for the product checkout. it contains the product on 'add to FlintCart' checkout details
 def checkout(request, pk):
     if request.user.is_authenticated:
         currentUser = request.user
@@ -272,16 +275,16 @@ def checkout(request, pk):
     Vat= {'KE': 0.875, 'UG': 0.965, 'NAM' : 0.905}
     total = 0.0
     total = Decimal(total)
-    VaT =Vat['KE']    
+    VaT =Vat['KE']
     VaT = Decimal(VaT)
     finaltotal= 0.0
     for flintcart in to_buy:
         size_to_buy =size_to_buy+flintcart.count
         value_of_FlintCart = flintcart.price * flintcart.count
-        total = total + value_of_FlintCart 
+        total = total + value_of_FlintCart
         value = flintcart.count * VaT
 
-    if total>0:   
+    if total>0:
         finaltotal = total + value
         finaltotal = round(finaltotal,2)
     else:
@@ -292,7 +295,7 @@ def checkout(request, pk):
     for client in by_client:
         context['phone_num']=client.phonenumber
         context['add_prod']= client.physical_address
-    context['num_prod']= size_to_buy  
+    context['num_prod']= size_to_buy
     context['price_prod']=finaltotal
     context['serialCode'] = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
     context['form'] = Checkoutform()
@@ -321,21 +324,21 @@ def flintordercatch(request):
     ordval = ''
     count = 1
     for orders in cartorders:
-        
+
         ordval = str(count)+').'+ orders.Product_name +'('+str(orders.count)+ "),"
         count += 1
         ordlist.append(ordval)
-    
+
     #print(ordlist)
 
     min_char = 10
     max_char = 12
     allchar = string.ascii_letters + string.digits
-    serialcode = "".join(choice(allchar) for x in range(randint(min_char, max_char)))      
+    serialcode = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
 
-    products_ordered = ''.join(ordlist) 
-         
-    
+    products_ordered = ''.join(ordlist)
+
+
 
     print(products_ordered)
     neword = FlintwoodOrders(OrderID=serialcode,OrderDate= timezone.now(),OrderList=products_ordered,Order_Payment=False,user=currentUser)

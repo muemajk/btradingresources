@@ -20,13 +20,14 @@ def supplier_view(request):
 	template = loader.get_template('members/Supplier.html')
 	pform = ProductForm(request.POST or None)
 	sform = searchForm(request.POST or None)
-	
+
 	context ={
 		'user_content':  Product.objects.all(),
 	    'user_name': currentUser.username,
         'times' : timezone.now(),
         'pform' : pform,
         'sform' : sform,
-        
+		'user': Client.objects.filter(user=request.user),
+
 	}
 	return HttpResponse(template.render(context,request))

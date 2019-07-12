@@ -26,10 +26,11 @@ def login_page(request):
 
     template = loader.get_template('members/login.html')
     context = {
-        'form' : form
+        'form' : form,
+
     }
     print('User logged in')
-    
+
     if form.is_valid():
         username = form.cleaned_data.get("username")
         password = form.cleaned_data.get("password")
@@ -43,21 +44,13 @@ def login_page(request):
                 userid = currentUser.id
                 request.session['userID'] = userid
                 request.session['Usern']= currentUser.username
-                by_client = Client.objects.filter(user=userid)
-                clientinfo= ""
-                for client in by_client:
-                    if client.role == "buyer":
-                        return redirect('/Users/profile/')
-                    elif client.role == "supplier":
-                        return redirect('/Supplier/')
-                        
 
                 print(request.session['userID'])
-                return redirect('/Users/profile/')
-                
+                return redirect('/')
+
         else:
-            
-            print("Error!") 
+
+            print("Error!")
     return HttpResponse(template.render(context,request))
 
 
@@ -70,9 +63,10 @@ def register_page(request):
     template = loader.get_template('members/register.html')
     context = {
         'form' : form,
+        
     }
     if form.is_valid():
-        
+
         user_name = form.cleaned_data.get("username")
         firstname = form.cleaned_data.get("firstname")
         lastname = form.cleaned_data.get("lastname")
@@ -90,7 +84,7 @@ def register_page(request):
         new_user = Users.objects.create_user(user_name, emailad, passwords)
         new_user.last_name = lastname
         new_user.first_name = firstname
-        
+
         new_user.save()
 
         #print(role)
@@ -109,25 +103,18 @@ def register_page(request):
                 print(request.session['Usern'])
                 new_client = Client(user=currentUser,physical_address=physical_address,role= role,privilege=priv,Country=country,phonenumber=phone, Alternate_phonenumber =altphone, WeChat=wechat , Skype= skype )
                 new_client.save()
-                
-                if role == 'buyer':
-                    return redirect('/Users/profile/')
-                elif role == 'Flintwood_supplier':
-                    return redirect('/FlintwoodSupplier/')
-                elif role == 'btsupplier':
-                    return redirect('/BTTitanSupplier/')
-                elif role == 'biotec_supplier':
-                    return redirect('/BiotecSupplier/')
+
+                return redirect('/')
 
                 login(request,user)
                 print(user)
 
 
 
-                        
 
 
-                
+
+
     return HttpResponse(template.render(context,request))
 
 
@@ -157,7 +144,7 @@ def profile_view(request):
     for client in by_client:
         clientinfo = client
 
-    
+
     context = {
         'useracc': currentUser,
         'user_name': currentUser.username,
@@ -172,22 +159,23 @@ def profile_view(request):
         'aphoneform':AltphoneUpdateform(),
         'mphoneform':phoneUpdateform(),
         'privform':Privilegeform(),
+        'user': Client.objects.filter(user=request.user),
     }
-
+    print(clientinfo.role)
     if addforms.is_valid():
         newadd = addforms.cleaned_data.get('physical_address')
         cli = Client.objects.get(user=userid)
         cli.physical_address =newadd
-        
-        cli.save(update_fields=['physical_address']) 
-        return redirect('/Users/profile/')    
+
+        cli.save(update_fields=['physical_address'])
+        return redirect('/Users/profile/')
 
 
     if emailforms.is_valid():
         newemail = emailforms.cleaned_data.get('email')
         user = User.objects.get(id=userid)
         user.email =newemail
-        user.save(update_fields=['email']) 
+        user.save(update_fields=['email'])
         return redirect('/Users/profile/')
 
     if passforms.is_valid():
@@ -195,32 +183,32 @@ def profile_view(request):
         #oldpass = passforms.cleaned_data.get('Current_password')
         user = User.objects.get(id=userid)
         user.password =newpass
-        user.save(update_fields=['password']) 
+        user.save(update_fields=['password'])
         return redirect('/Users/profile/')
 
     if aphoneforms.is_valid():
         altphon = aphoneforms.cleaned_data.get('phone')
         cli = Client.objects.get(user=userid)
         cli.Alternate_phonenumber =altphon
-        
-        cli.save(update_fields=['Alternate_phonenumber']) 
-        return redirect('/Users/profile/')    
+
+        cli.save(update_fields=['Alternate_phonenumber'])
+        return redirect('/Users/profile/')
 
 
     if mphoneforms.is_valid():
         mphone = mphoneforms.cleaned_data.get('phone')
         cli = Client.objects.get(user=userid)
         cli.phonenumber =mphone
-        
-        cli.save(update_fields=['phonenumber']) 
-        return redirect('/Users/profile/') 
+
+        cli.save(update_fields=['phonenumber'])
+        return redirect('/Users/profile/')
 
     if privforms.is_valid():
         newpriv =  privforms.cleaned_data.get("privilege")
         cli = Client.objects.get(user=userid)
         cli.privilege =newpriv
-        
-        cli.save(update_fields=['privilege']) 
+
+        cli.save(update_fields=['privilege'])
         return redirect('/Users/profile/')
 
     return HttpResponse(template.render(context,request))
@@ -228,23 +216,23 @@ def profile_view(request):
 
 def delete_from_user(request,pk):
     Users.objects.filter(id=pk).delete()
-    return redirect('/Users/logout/')    
+    return redirect('/Users/logout/')
 
 def update_phone_to_user(request,pk):
     Users.objects.filter(id=pk).delete()
-    return redirect('/Users/profile/')  
+    return redirect('/Users/profile/')
 
 def update_password_to_user(request,pk):
     Users.objects.filter(id=pk).delete()
-    return redirect('/Users/profile/')  
+    return redirect('/Users/profile/')
 
 def update_address_to_user(request,pk):
     Users.objects.filter(id=pk).delete()
-    return redirect('/Users/profile/')  
+    return redirect('/Users/profile/')
 
 def update_email_to_user(request,pk):
     Users.objects.filter(id=pk).delete()
-    return redirect('/Users/profile/')  
+    return redirect('/Users/profile/')
 
 
 
@@ -262,4 +250,3 @@ def logout_view(request):
     except KeyError:
         pass
     return redirect('/')
-

@@ -37,14 +37,15 @@ def store_page(request):
         else:
             return   redirect('/Users/login/')
     else:
-         return   redirect('/Users/login/') 
+         return   redirect('/Users/login/')
     usez = None
     context = {
-        'user_content':  Product.objects.all(),
+        'user_content':  Product.objects.filter(Active=True),
         'user_name': usez,
         'times' : timezone.now(),
         'img': 'none',
-        'comp': 'TKTITAN'
+        'comp': 'TKTITAN',
+        'user': Client.objects.filter(user=request.user),
     }
     photo =  Product.objects.all()
     pic=''
@@ -53,12 +54,12 @@ def store_page(request):
         print(pic)
     if request.user.is_authenticated:
         username = request.user.username
-        context['user_content'] =  Product.objects.all()
+        context['user_content'] =  Product.objects.filter(Active=True)
         context['user_name']= username
         context['img'] = pic
-    template = loader.get_template('products/Tkstore.html') 
+    template = loader.get_template('products/Tkstore.html')
 
-    
+
     return HttpResponse(template.render(context,request))
 
 
@@ -77,22 +78,22 @@ def product_page(request, pk):
         else:
             return   redirect('/Users/login/')
     else:
-         return   redirect('/Users/login/') 
-     
+         return   redirect('/Users/login/')
+
     user_name= None
     prod = get_object_or_404(Product,pid=pk)
     #for pro in prod:
     cat = prod.Product_Catergory
     print(cat)
     #prodcat= ProductCatergory.objects.filter(id=pro)
-   
+
     form = Productnumber(request.POST or None)
     context = {
         'info' : prod,
-        
-        'user': 4,
+        'user': Client.objects.filter(user=request.user),
+        'userzz': 4,
         'form': Productnumber(),
-        'prod_count': 1,        
+        'prod_count': 1,
         'user_name':request.user.username,
         'times' : timezone.now(),
         'comp': 'TKTITAN',
@@ -121,22 +122,22 @@ def addtoTKCart(request, pk, size):
         else:
             return   redirect('/Users/login/')
     else:
-         return   redirect('/Users/login/') 
+         return   redirect('/Users/login/')
     #get user info
     currentUser = request.session['userID']
-    
+
     #get product info
     pdo = Product.objects.get(pid=pk)
     Product_name = pdo.name
     #get Member info
-    
+
     descr = pdo.description
     descr = descr[:75]
 
     newdes = descr + '...'
     bp = TKCart(User_ID=request.user,Product_name=Product_name, Product_description=newdes, price=pdo.price , count =size, ProductID=pdo)
     bp.save()
-    return redirect('/TKTitan/TKCart/')    
+    return redirect('/TKTitan/TKCart/')
 
 
 def TKCart_view(request):
@@ -152,7 +153,7 @@ def TKCart_view(request):
         else:
             return   redirect('/Users/login/')
     else:
-         return   redirect('/Users/login/') 
+         return   redirect('/Users/login/')
     currentUser = request.session['userID']
     #usern =request.session['Usern']
     form = Productnumber(request.POST or None)
@@ -163,24 +164,25 @@ def TKCart_view(request):
     TKCartprods = TKCart.objects.filter(User_ID=currentUser)
 
     Vat= {'KE': 0.875, 'UG': 0.965, 'NAM' : 0.905}
-    context = {   
+    context = {
         'TKCart_content': '',
         'Userid': 4,
         'total_price': 0,
         'Vat':0,
-        'user': request.user.username,
+
         'memid': 0,
         'form': form,
         'user_name':request.user.username,
         'times' : timezone.now(),
-        'comp': priv
+        'comp': priv,
+        'user': Client.objects.filter(user=request.user),
     }
     #start
 
     total = 0.0
     total = Decimal(total)
 
-    
+
     value = 0
     finaltotal= 0
     counter = 0
@@ -199,9 +201,9 @@ def TKCart_view(request):
     if cartz == True:
         context['final_price']= int(total + VaT)
     if cartz == False:
-        context['final_price']= int(total + VaT) 
+        context['final_price']= int(total + VaT)
     #end
-    
+
     if form.is_valid():
         newnum = form.cleaned_data.get('size')
         newid =  request.POST.get('ip')
@@ -213,8 +215,8 @@ def TKCart_view(request):
     context['TKCart_content'] = TKCart.objects.filter(User_ID=currentUser)
     context['Userid'] =  currentUser
     context['total_price']= int(total)
-    
-    
+
+
     context['memid'] = currentUser
     template = loader.get_template('products/tkcart.html')
 
@@ -223,7 +225,7 @@ def TKCart_view(request):
 
 
 def calculate_TKCart(request):
-    
+
     return redirect('/TKTitan/TKCart/')
 
 def delete_from_TKCart(request, pk):
@@ -240,7 +242,7 @@ def clear_whole_TKCart(request, pk):
 
 
 
-#this view is for the product checkout. it contains the product on 'add to TKCart' checkout details 
+#this view is for the product checkout. it contains the product on 'add to TKCart' checkout details
 def checkout(request, pk):
     if request.user.is_authenticated:
         currentUser = request.user
@@ -254,7 +256,7 @@ def checkout(request, pk):
         else:
             return   redirect('/Users/login/')
     else:
-         return   redirect('/Users/login/') 
+         return   redirect('/Users/login/')
     context = {
     'userz': currentUser,
     'num_prod': 'num_prod',
@@ -279,16 +281,16 @@ def checkout(request, pk):
     Vat= {'KE': 0.875, 'UG': 0.965, 'NAM' : 0.905}
     total = 0.0
     total = Decimal(total)
-    VaT =Vat['KE']    
+    VaT =Vat['KE']
     VaT = Decimal(VaT)
     finaltotal= 0.0
     for cart in to_buy:
         size_to_buy =size_to_buy+cart.count
         value_of_TKCart = cart.price * cart.count
-        total = total + value_of_TKCart 
+        total = total + value_of_TKCart
         value = cart.count * VaT
 
-    if total>0:   
+    if total>0:
         finaltotal = total + value
         finaltotal = round(finaltotal,2)
     else:
@@ -299,7 +301,7 @@ def checkout(request, pk):
     for client in by_client:
         context['phone_num']=client.phonenumber
         context['add_prod']= client.physical_address
-    context['num_prod']= size_to_buy  
+    context['num_prod']= size_to_buy
     context['price_prod']=finaltotal
     context['serialCode'] = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
     context['form'] = Checkoutform()
@@ -328,21 +330,21 @@ def tkordercatch(request):
     ordval = ''
     count = 1
     for orders in cartorders:
-        
+
         ordval = str(count)+').'+ orders.Product_name +'('+str(orders.count)+ "),"
         count += 1
         ordlist.append(ordval)
-    
+
     #print(ordlist)
 
     min_char = 10
     max_char = 12
     allchar = string.ascii_letters + string.digits
-    serialcode = "".join(choice(allchar) for x in range(randint(min_char, max_char)))      
+    serialcode = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
 
-    products_ordered = ''.join(ordlist) 
-         
-    
+    products_ordered = ''.join(ordlist)
+
+
 
     print(products_ordered)
     neword = TktitanOrders(OrderID=serialcode,OrderDate= timezone.now(),OrderList=products_ordered,Order_Payment=False,user=currentUser)

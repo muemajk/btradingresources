@@ -7,65 +7,144 @@
     <link href="https://fonts.googleapis.com/css?family=Pacifico&display=swap" rel="stylesheet">
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     <title>Supplier Profile!</title>
   </head>
   <body  style="font-family: sans-serif; width: 100%">
-     <nav class="navbar navbar-inverse" style=" box-shadow: 0px 0px 5px grey; position: fixed; top: 0;  left: 0;  z-index: 9999;  width: 100%; height: 50px; background-color: white;  height: 90px;  ">
-  <div class="container-fluid" style="">
-    <div class="navbar-header" style="">
-      <a class="navbar-brand" href="{% url 'ecommerce:index'%}"><strong>BT</strong>RESOURCES</a>
 
-    </div>
-    <ul class="nav navbar-nav" style="display: inline-block; width: 57%; padding-left: 15%; float: right; ">
-      <li class="active" style="display: inline-block;  margin-left: 2%;"><a href="{% url 'ecommerce:index'%}" style="text-decoration-color: grey; color: black; font-weight: bold;">HOME</a></li>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark " style=" position: fixed; top: 0;  left: 0;  z-index: 9999;  width: 100%; height: 50px; background-color: #FFFFF0;  height: auto;  ">
+              <a class="navbar-brand" href="{% url 'ecommerce:index'%}"><strong>BT</strong>RESOURCES</a>
 
-      <li class="dropdown" style="display: inline-block; margin-left: 2%; font-weight: bold;">
-        <a href="{% url 'ecommerce:company_view'%}"style="text-decoration-color: black; color: black; font-weight: bold;">OUR COMPANIES</a>
-        
-      </li>
-      <li style="display: inline-block; margin-left: 2%;"><a href="{% url 'ecommerce:membership_view'%}" style="text-decoration-color: black; font-weight: bold; color: black;">MEMBERSHIP</a></li>
+            <ul class="nav navbar-nav ">
+              <li class="active" ><a href="{% url 'ecommerce:index'%}">HOME</a></li>
+              <li ><a href="{% url 'ecommerce:company_view'%}">COMPANIES</a></li>
+              <li ><a href="{% url 'ecommerce:membership_view'%}">MEMBERSHIP</a></li>
+              <li><a href="{% url 'ecommerce:about_view'%}">ABOUT US</a></li>
+            </ul>
 
+            <ul class="navbar-nav  ml-auto">
+              {%if user_name == None%}
+               <li><span class="glyphicon glyphicon-log-in"></span><a href="{% url 'login_page'%}">LOGIN</a></li>
+              <li><span class="glyphicon glyphicon-user"></span><a href="{% url 'register_page'%}">SIGN UP</a></li>
+              {%elif user_name != None %}
+              {%for logged_user in user%}
+              {%if logged_user.role == "Admin" %}
+              <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="{% url 'adminstrator:order_view'%}"><span class="glyphicon glyphicon-shopping-cart"></span>ORDERS</a></li>
+
+    <li class="nav-item dropdown" style="color:white;"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user_name}}<br>{{times}}</a>
+    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+
+
+
+
+
+      <a class="dropdown-item" href="{% url 'adminstrator:buyers_view'%}">USERS</a>
+      <a class="dropdown-item" href="{% url 'adminstrator:freight'%}">FREIGHT VIEW</a>
+      <a class="dropdown-item" href="{% url 'adminstrator:freight_view'%}">FREIGHT CREATE</a>
+      <a class="dropdown-item" href="{% url 'adminstrator:finalied_order_view'%}">FULFILLED ORDERS</a>
+      <a class="dropdown-item" href="{% url 'adminstrator:product_view'%}">VERIFIED PRODUCTS</a>
+      <a class="dropdown-item" href="{% url 'adminstrator:verify_product'%}">UNVERIFIED PRODUCTS</a>
+      {%elif logged_user.role == "buyer"%}
+          {%if logged_user.privilege == "flintwood"%}
+                  <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="{% url 'Flintwood:FlintCart_view'%}" ><span class="glyphicon glyphicon-shopping-cart"></span>CART</a></li>
+          {%elif logged_user.privilege == "biotech"%}
+                  <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="{% url 'Biotech:cart_view'%}" ><span class="glyphicon glyphicon-shopping-cart"></span>CART</a></li>
+          {%elif logged_user.privilege == "bttitan"%}
+                  <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="{% url 'TkTitan:TKCart_view'%}"><span class="glyphicon glyphicon-shopping-cart"></span>CART</a></li>
+          {%elif logged_user.privilege == "all"%}
+                    <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-shopping-cart"></span>CART</a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                          <a class="dropdown-item" href="{% url 'Flintwood:FlintCart_view'%}">Flintwood</a>
+                          <a class="dropdown-item" href="{% url 'Biotech:cart_view'%}">Biotec</a>
+                          <a class="dropdown-item" href="{% url 'TkTitan:TKCart_view'%}">Bttitan</a>
+                        </div
+                    </li>
+          {%endif%}
+          <li class="nav-item dropdown" style="color:white;"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user_name}}<br>{{times}}</a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+      {%elif logged_user.role == "Flintwood_supplier"%}
+              {%if logged_user.privilege == "flintwood"%}
+                      <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="{% url 'Flintwood:FlintCart_view'%}"><span class="glyphicon glyphicon-shopping-cart"></span>CART</a></li>
+              {%elif logged_user.privilege == "biotech"%}
+                      <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="{% url 'Biotech:cart_view'%}"><span class="glyphicon glyphicon-shopping-cart"></span>CART</a></li>
+              {%elif logged_user.privilege == "bttitan"%}
+                      <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="{% url 'TkTitan:TKCart_view'%}"><span class="glyphicon glyphicon-shopping-cart"></span>CART</a></li>
+              {%elif logged_user.privilege == "all"%}
+                        <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-shopping-cart"></span>CART</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                              <a class="dropdown-item" href="{% url 'Flintwood:FlintCart_view'%}">Flintwood</a>
+                              <a class="dropdown-item" href="{% url 'Biotech:cart_view'%}">Biotec</a>
+                              <a class="dropdown-item" href="{% url 'TkTitan:TKCart_view'%}">Bttitan</a>
+                            </div
+                        </li>
+              {%endif%}
+            <li class="nav-item dropdown" style="color:white;"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user_name}}<br>{{times}}</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="{% url 'FlintSupplier:supplier_view'%}">SUPPLY</a>
+    {%elif logged_user.role == "btsupplier"%}
+            {%if logged_user.privilege == "flintwood"%}
+                    <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="{% url 'Flintwood:FlintCart_view'%}"><span class="glyphicon glyphicon-shopping-cart"></span>CART</a></li>
+            {%elif logged_user.privilege == "biotech"%}
+                    <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="{% url 'Biotech:cart_view'%}"><span class="glyphicon glyphicon-shopping-cart"></span>CART</a></li>
+            {%elif logged_user.privilege == "bttitan"%}
+                    <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="{% url 'TkTitan:TKCart_view'%}"><span class="glyphicon glyphicon-shopping-cart"></span>CART</a></li>
+            {%elif logged_user.privilege == "all"%}
+                      <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-shopping-cart"></span>CART</a>
+                          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'Flintwood:FlintCart_view'%}">Flintwood</a>
+                            <a class="dropdown-item" href="{% url 'Biotech:cart_view'%}">Biotec</a>
+                            <a class="dropdown-item" href="{% url 'TkTitan:TKCart_view'%}">Bttitan</a>
+                          </div
+                      </li>
+            {%endif%}
+            <li class="nav-item dropdown" style="color:white;"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user_name}}<br>{{times}}</a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item" href="{% url 'BTTitanSupplier:supplier_view'%}">SUPPLY</a>
+    {%elif logged_user.role == "biotec_supplier"%}
+            {%if logged_user.privilege == "flintwood"%}
+                    <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="{% url 'Flintwood:FlintCart_view'%}"><span class="glyphicon glyphicon-shopping-cart"></span>CART</a></li>
+            {%elif logged_user.privilege == "biotech"%}
+                    <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="{% url 'Biotech:cart_view'%}"><span class="glyphicon glyphicon-shopping-cart"></span>CART</a></li>
+            {%elif logged_user.privilege == "bttitan"%}
+                    <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="{% url 'TkTitan:TKCart_view'%}"><span class="glyphicon glyphicon-shopping-cart"></span>CART</a></li>
+            {%elif logged_user.privilege == "all"%}
+                      <li class="nav-item dropdown" style="margin-top:8%;" ><a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-shopping-cart"></span>CART</a>
+                          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                            <a class="dropdown-item" href="{% url 'Flintwood:FlintCart_view'%}">Flintwood</a>
+                            <a class="dropdown-item" href="{% url 'Biotech:cart_view'%}">Biotec</a>
+                            <a class="dropdown-item" href="{% url 'TkTitan:TKCart_view'%}">Bttitan</a>
+                          </div
+                      </li>
+            {%endif%}
+              <li class="nav-item dropdown" style="color:white;"><a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{user_name}}<br>{{times}}</a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="{% url 'BiotecSupplier:supplier_view'%}">SUPPLY</a>
+      {%endif%}
+
+      {%endfor%}
+      <a class="dropdown-item" href="{% url 'profile_view'%}"><span class="glyphicon glyphicon-user"></span> PROFILE</a>
+      <a class="dropdown-item" href="{% url 'logout_view'%}"><span class="glyphicon glyphicon-log-out"></span> lOGOUT</a>
+    </div></li>
+    {%endif%}
     </ul>
-    <ul style="display: inline-block; width: auto; ">
-      {%if user_name == None%}
-       <li style="display: inline-block; margin-left: 3%;"><a href="{% url 'login_page'%}"style="text-decoration-color: black; font-weight: bold; color: black;">LOGIN</a></li>
-      
-      <li style=" display: inline-block; margin-left: 3%;">|</li>
-      <li style="display: inline-block; margin-left: 1%;"><a href="{% url 'register_page'%}" style="text-decoration-color: black; font-weight: bold; color: black;">SIGN UP</a></li>
-      {%elif user_name != None %}
-          
-            <li style=" display: inline-block; margin-top: 2px; margin-left: 2%;"><p style="font-weight: bold; font-size: 10px; font-style: italic;">{{user_name}}<br>{{times}}</p></li>
-            <li style=" display: inline-block;"><table>
-                <tr><td><div class="row" style="float: left; width: 100%;"><a class="btn btn-primary" href="{% url 'profile_view'%}" style="font-size: 10px; height: 25px;">PROFILE</a></div></td><td>              <div class="row" style="float: right; width: 100%;"><a class="btn btn-primary" href="{% url 'logout_view'%}" style="font-size: 10px; height: 25px;">lOGOUT</a></div></td></tr>
-              </table></li>
-      {%endif%}      
-    </ul>
-  </div>
-</nav>
-    <div class="container" style="text-align: left; margin-top: 100px;">
-      
+        </nav>
+    <div class="container-fluid" style="text-align: left; margin-top: 100px;">
+
       <div class="row" style="text-align: left;">
-        
-        <div class="col-sm-6 col-12" style="box-shadow: 0px 0px 5px grey; background-color: #FFFFF0; height: auto;">
-          <a href="" class="btn btn-default" style="background-color: #DCDCDC; font-weight: bold; font-size: 15px;  height: 35px;float: right;  margin-bottom: 10%; margin-right: 0%; color: #708090;">Settings</a>
-          <h2>Product Management</h2>
-          <!--<div class="col" style="box-shadow: 0px 0px 5px grey; height: 13%;">
-          <table style=" width: 100%;">
-          <tr>{{sform}}</tr>
-          </table>
-          <button class="btn btn-default" type="submit" style="float: right;">SEARCH</button><br></div> -->
-          <hr>        
-          <h5 style="margin-top: 10%;">Add new product:</h5>
-            <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+        <div class="card" style="width: 50rem;box-shadow: 0px 0px 5px grey; background-color: #FFFFF0; height: auto;">
+            <h2>Product Management</h2>
+            <div class="card-body">
+              <h5 style="margin-top: 10%;">Add new product:</h5>
+                <form method="POST" enctype="multipart/form-data">{% csrf_token %}
 
-            {{ pform }}
-            <hr>
-            <table style=" width: auto; margin-top: 1%; margin-bottom: 10%; float: right;">
-            <tr><td></td><td><button class="btn btn-default" type="submit">ADD</button></td></tr></form>
-          </table><br>
-          
-        </div>
+                {{ pform }}
+                <hr>
+                <button class="btn btn-default" type="submit">ADD</button></form>
+
+            </div>
+          </div>
 
           <div class="col" style="float: right; width: 100%; ">
             <h2>All your products</h2><hr>
@@ -73,32 +152,33 @@
               <h5>You are suppling: {{ num_products }}</h5>
             </div>
             {%if user_content != None%}
-            {% for product in user_content %}
-            <div class="col" style=" width: 30%;height: 340px;  font-size: 10px; border:1px solid #FFFFF0; border-radius: 10px 10px 10px; box-shadow: 1px 1px 1px grey; display: inline-block; margin-bottom: 10px; height: 280px;" >
-              <div class="col">
-            <h6 style="text-align: center; font-weight: bold;">{{ product.name}}</h6>
-            {%if product.image.url != None%}
-            <img src="{{product.image.url}}" alt="" width="60px" height="100px" >
-            {%elif product.image.url == Null %}
-            <p>None image </p>
-            {%endif%}
-            <p>{{product.description}} </p>
-            <table style="width: 100%; padding: 0px;"><tr><td style=" font-size: 10px; font-style: italic;  ">{{product.price}} USD</td></tr><tr><td style="font-size: 10px;  font-style: italic;">{{product.stock}} In stock</td></tr></table></div>
-              <div class="col"  >
-               <table style="width: 100%"><tr><td>
-              <a class="btn btn-default" href="" style="font-weight: bold; font-style: italic; display: inline-block; float: left; border: solid;  border-width: thin; font-size: 7px;  text-align: center; ">DELETE</a></td><td>
-              <a class="btn btn-primary" href= "" style="font-weight: bold;  font-style: italic; display: inline-block; font-size: 7px; text-align: center;">DEACTIVATE</a></td></tr></table>
-              </div>              
-            </div>
-              {% endfor %}
+              {% for product in user_content %}
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top"src="{{product.image.url}}" alt="Card image cap" height="130px"  >
+                    <div class="card-body">
+                      <h5 class="card-title">{{product.name}}</h5>
+                      <p>{{product.description}} </p>
+                      <p class="card-text">{{product.stock}} Units In stock</p>
+                      <p class="card-text">PRICE: {{product.price}}</p>
+
+                      <a class="btn btn-default" href="{% url 'adminstrator:delete_product' comp=product.Product_Catergory pk=product.pid%}">DELETE</a></td><td>
+                        {%if product.Active == True%}
+                      <a class="btn btn-primary" href= "{%url 'adminstrator:verify' comp=product.Product_Catergory  pk=product.pid%}">DEACTIVATE</a>
+                        {%elif product.Active == False%}
+                        <a class="btn btn-primary" href= "">PENDING..</a>
+                        {%endif%}
+                    </div>
+                  </div>
+                  {%endfor%}
+
               {%elif user_content == None %}
             <div class="col" >
             <h6>NO PRODUCTS SUPPLYING</h6>
-                         
+
             </div>
-            {%endif%} 
+            {%endif%}
     </div></div></div>
-    
+
     <!-- Footer -->
 
     <!-- Footer -->

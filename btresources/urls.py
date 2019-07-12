@@ -31,8 +31,8 @@ urlpatterns = [
 	path('Users/', include('Users.urls')),
 	path('Supplier/', include(('Supplier.urls','Supplier'), namespace='Supplier')),
 	path('FlintwoodSupplier/', include(('FlintSupplier.urls','FlintSupplier'), namespace='FlintSupplier')),
-	path('BiotecSupplier/', include(('BiotechSupplier.urls','BiotechSupplier'), namespace='BiotechSupplier')),
-	path('BTTitanSupplier/', include(('TitanSupplier.urls','TitanSupplier'), namespace='TitanSupplier')),
+	path('BiotecSupplier/', include(('BiotechSupplier.urls','BiotecSupplier'), namespace='BiotecSupplier')),
+	path('BTTitanSupplier/', include(('TitanSupplier.urls','BTTitanSupplier'), namespace='BTTitanSupplier')),
 	path('adminstrator/', include(('adminstrator.urls','adminstrator'), namespace='adminstrator')),		
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

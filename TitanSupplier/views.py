@@ -34,7 +34,8 @@ def supplier_view(request):
         'times' : timezone.now(),
         'pform' : pform,
         'sform' : sform,
-        
+		'user': Client.objects.filter(user=request.user),
+
 	}
 
 
@@ -54,12 +55,10 @@ def supplier_view(request):
 		password_characters =string.digits
 		ids=int( ''.join(random.choice(password_characters) for i in range(6)))
 
-		new_product = Product(pid=ids,name=item,Brand_Name=brand, Product_Catergory="Mineral",
-			description=description,origin=origin,price=price,image= pic,stock=stock,Unit=unit,tksupplierid=currentUser, Packaging=pack,Active=True)
+		new_product = Product(pid=ids,name=item,Brand_Name=brand,
+			description=description,origin=origin,price=price,image= pic,stock=stock,Unit=unit,tksupplierid=currentUser, Packaging=pack,Active=False)
 		new_product.save()
 		return HttpResponseRedirect('/BTTitanSupplier/')
 
 	context['pform']= ProductForm()
-	return HttpResponse(template.render(context,request))  	
-
-
+	return HttpResponse(template.render(context,request))

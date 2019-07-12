@@ -25,7 +25,7 @@ def index(request):
 
 
 def orders_view(request):
-    currentUser = request.session['userID'] 
+    currentUser = request.session['userID']
     try:
         memeber = Member.objects.filter(Userid=currentUser)
         for mem in memeber:
@@ -49,11 +49,12 @@ def orders_view(request):
         'address':  memphysical_address,
         'form': form,
         'ordersize': 0,
-    }    
+        'user': Client.objects.filter(user=request.user),
+    }
 
     if form.is_valid():
         username = form.cleaned_data.get("cardcode")
-    
+
     for order in ordercart:
         sizeord = len(ordercart)
         context['ordersize'] = sizeord
@@ -73,13 +74,13 @@ def orders(request, company, price):
         for client in by_client:
             pk = client.id
     else:
-         return   redirect('/Users/login/') 
+         return   redirect('/Users/login/')
 
     form = Checkoutform(request.POST or None)
     min_char = 10
     max_char = 12
     allchar = string.ascii_letters + string.digits
-    
+
     #get prices and TKCart info
     if company == 'tktitan':
         print(pk)
@@ -95,7 +96,8 @@ def orders(request, company, price):
             'form': 'ghf',
             'user_name':request.user.username,
             'comp': 'TKTITAN',
-        }        
+            'user': Client.objects.filter(user=request.user),
+        }
         to_buy = TKCart.objects.filter(User_ID=userid)
         size_to_buy = 0
         total = 0.0
@@ -105,7 +107,7 @@ def orders(request, company, price):
             size_to_buy =size_to_buy+cart.count
             value_of_TKCart = cart.price * cart.count
             rates = freightRate.objects.filter(Product_types='Mineral')
-            
+
             for rate in rates:
                 print(cart.count)
                 if cart.count >= rate.MiniQuantitySent & cart.count <= rate.MaxQuantityRecieved:
@@ -114,8 +116,8 @@ def orders(request, company, price):
                     for client in by_client:
                         context['phone_num']=client.phonenumber
                         context['add_prod']= client.physical_address
-                    context['num_prod']= size_to_buy  
-                    
+                    context['num_prod']= size_to_buy
+
                     context['serialCode'] = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
                     context['form'] = Checkoutform()
                     context['product_list'] = to_buy
@@ -137,7 +139,8 @@ def orders(request, company, price):
             'form': 'ghf',
             'user_name':request.user.username,
             'comp': 'TKTITAN',
-        } 
+            'user': Client.objects.filter(user=request.user),
+        }
         to_buy = Cart.objects.filter(User_ID=userid)
         size_to_buy = 0
         total = 0.0
@@ -153,8 +156,8 @@ def orders(request, company, price):
                     for client in by_client:
                         context['phone_num']=client.phonenumber
                         context['add_prod']= client.physical_address
-                    context['num_prod']= size_to_buy  
-                    
+                    context['num_prod']= size_to_buy
+
                     context['serialCode'] = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
                     context['form'] = Checkoutform()
                     context['product_list'] = to_buy
@@ -177,7 +180,8 @@ def orders(request, company, price):
             'form': 'ghf',
             'user_name':request.user.username,
             'comp': 'TKTITAN',
-        } 
+            'user': Client.objects.filter(user=request.user)
+        }
         to_buy = FlintCart.objects.filter(User_ID=userid)
         size_to_buy = 0
         total = 0.0
@@ -195,8 +199,8 @@ def orders(request, company, price):
                     for client in by_client:
                         context['phone_num']=client.phonenumber
                         context['add_prod']= client.physical_address
-                    context['num_prod']= size_to_buy  
-                    
+                    context['num_prod']= size_to_buy
+
                     context['serialCode'] = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
                     context['form'] = Checkoutform()
                     context['product_list'] = to_buy
@@ -217,7 +221,7 @@ def ordercatch(request , company):
         currentUser = request.user
         userid = currentUser.id
         by_client = Client.objects.filter(user=userid)
-        
+
     else:
          return   redirect('/Users/login/')
 
@@ -227,21 +231,21 @@ def ordercatch(request , company):
         ordval = ''
         count = 1
         for orders in cartorders:
-            
+
             ordval = str(count)+').'+ orders.Product_name +'('+str(orders.count)+ "),"
             count += 1
             ordlist.append(ordval)
-        
+
         #print(ordlist)
 
         min_char = 10
         max_char = 12
         allchar = string.ascii_letters + string.digits
-        serialcode = "".join(choice(allchar) for x in range(randint(min_char, max_char)))      
+        serialcode = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
 
-        products_ordered = ''.join(ordlist) 
-             
-        
+        products_ordered = ''.join(ordlist)
+
+
 
         print(products_ordered)
         neword = FlintwoodOrders(OrderID=serialcode,OrderDate= timezone.now(),OrderList=products_ordered,Order_Payment=False,user=currentUser)
@@ -254,21 +258,21 @@ def ordercatch(request , company):
         ordval = ''
         count = 1
         for orders in cartorders:
-            
+
             ordval = str(count)+').'+ orders.Product_name +'('+str(orders.count)+ "),"
             count += 1
             ordlist.append(ordval)
-        
+
         #print(ordlist)
 
         min_char = 10
         max_char = 12
         allchar = string.ascii_letters + string.digits
-        serialcode = "".join(choice(allchar) for x in range(randint(min_char, max_char)))      
+        serialcode = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
 
-        products_ordered = ''.join(ordlist) 
-             
-        
+        products_ordered = ''.join(ordlist)
+
+
 
         print(products_ordered)
         neword = BiotechOrders(OrderID=serialcode,OrderDate= timezone.now(),OrderList=products_ordered,Order_Payment=False,user=currentUser)
@@ -281,21 +285,21 @@ def ordercatch(request , company):
         ordval = ''
         count = 1
         for orders in cartorders:
-            
+
             ordval = str(count)+').'+ orders.Product_name +'('+str(orders.count)+ "),"
             count += 1
             ordlist.append(ordval)
-        
+
         #print(ordlist)
 
         min_char = 10
         max_char = 12
         allchar = string.ascii_letters + string.digits
-        serialcode = "".join(choice(allchar) for x in range(randint(min_char, max_char)))      
+        serialcode = "".join(choice(allchar) for x in range(randint(min_char, max_char)))
 
-        products_ordered = ''.join(ordlist) 
-             
-        
+        products_ordered = ''.join(ordlist)
+
+
 
         print(products_ordered)
         neword = TktitanOrders(OrderID=serialcode,OrderDate= timezone.now(),OrderList=products_ordered,Order_Payment=False,user=currentUser)

@@ -17,7 +17,7 @@ class Product(models.Model):
     pid = models.IntegerField(primary_key=True, default=1)
     name = models.CharField(max_length=254, default='')
     Brand_Name = models.CharField(max_length=254, default='')
-    Product_Catergory = models.CharField(max_length=254, default='Mineral')
+    Product_Catergory = models.CharField(max_length=254, default='Medicine')
     description = models.TextField(max_length=2000)
     origin = models.CharField(max_length=254, default='')
     price = models.DecimalField(max_digits=6, decimal_places=2)
